@@ -14,14 +14,4 @@ public class RenderComponent : Component
     public float ZIndex { get; set; } = 0f;
 
     public bool Visible { get; set; } = true;
-
-    public override void Init()
-    {
-
-    }
-
-    public override void Update(float deltaTime)
-    {
-        
-    }
 }
