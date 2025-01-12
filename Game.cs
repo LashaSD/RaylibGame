@@ -17,7 +17,6 @@ class Entry
         {
             TransformComponent? transform = player.GetComponent<TransformComponent>();
             transform?.SetScale(new Vector2(4, 4));
-            player[TransformComponent]?.SetScale();
 
             StateComponent? playerState = player.GetComponent<StateComponent>();
             playerState?.SetState(State.Run);
