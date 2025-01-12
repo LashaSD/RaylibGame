@@ -13,7 +13,7 @@ public class Entity
         }
     }
 
-    public T GetComponent<T>() where T : Component
+    public T? GetComponent<T>() where T : Component
     {
         if (!this.Components.ContainsKey(typeof(T)))
         {

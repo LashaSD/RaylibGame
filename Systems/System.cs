@@ -19,3 +19,4 @@ class BaseSystem<T> where T : Component
 class TransformSystem : BaseSystem<TransformComponent> { }
 class RenderSystem : BaseSystem<RenderComponent> { }
 class AnimationSystem : BaseSystem<AnimationComponent> { }
+class StateSystem : BaseSystem<StateComponent> { }

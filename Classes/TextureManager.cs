@@ -1,11 +1,10 @@
 using Raylib_cs;
-using System.IO;
 
-class TextureManager
+public static class TextureManager
 {
-    Dictionary<string, Texture2D> Textures = new();
+    private static Dictionary<string, Texture2D> Textures = new();
     
-    public void LoadTextures()
+    public static void LoadTextures()
     {
         string baseDirectory = Environment.CurrentDirectory;
         string folderName = "Assets";
@@ -16,35 +15,35 @@ class TextureManager
 
         foreach (string fileDir in files)
         {
-            this.Textures.Add(Path.GetFileName(fileDir), Raylib.LoadTexture(fileDir));
+            Textures.Add(Path.GetFileName(fileDir), Raylib.LoadTexture(fileDir));
         }
 
         foreach (string dir in directories)
         {
             foreach (string fileDir in Directory.GetFiles(dir))
             {
-                this.Textures.Add(Path.GetFileName(fileDir), Raylib.LoadTexture(fileDir));
+                Textures.Add(Path.GetFileName(fileDir), Raylib.LoadTexture(fileDir));
             }
         }
     }
 
-    public Texture2D? TryGetTexture(string name)
+    public static Texture2D? TryGetTexture(string name)
     {
-        if (this.Textures.ContainsKey(name))
+        if (Textures.ContainsKey(name))
         {
-            return this.Textures[name];
+            return Textures[name];
         }
 
         return null;
     }
 
-    public Rectangle GetNthSpriteRect(string name, int n)
+    public static Rectangle? GetNthSpriteRect(string name, int n)
     {
         int TileCount;
         TextureTiles.Textures.TryGetValue(name, out TileCount);
 
         Texture2D Texture;
-        this.Textures.TryGetValue(name, out Texture);
+        Textures.TryGetValue(name, out Texture);
 
         float SpriteWidth = Texture.Width / TileCount;
         float SpriteHeight = Texture.Height;

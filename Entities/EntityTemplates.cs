@@ -3,40 +3,13 @@ using System.Numerics;
 
 class EntityTemplates
 {
-    public static Entity PlayerEntity(Texture2D texture)
+    public static Entity PlayerEntity()
     {
         Entity PlayerEntity = new();
-        PlayerEntity.AddComponent<RenderComponent>(new RenderComponent() { 
-                    Texture = texture,
-                    SourceRect = new Rectangle(86, 0, 86, 86),
-                    Origin = new Vector2(0, 0),
-                });
-
-        PlayerEntity.AddComponent<TransformComponent>(new TransformComponent() { 
-                    Position = new Vector2(0, 0),
-                    Size = new Vector2(86 * 4, 86 * 4)
-                });
-
-        PlayerEntity.AddComponent<StateComponent>(new StateComponent() { 
-                    CurrentState = State.Attack3 
-                });
-
-        return PlayerEntity;
-    }
-
-    public static Entity PlayerEntity(Texture2D texture, Vector2 position)
-    {
-        Entity PlayerEntity = new();
-        PlayerEntity.AddComponent<RenderComponent>(new RenderComponent() { 
-                    Texture = texture,
-                    SourceRect = new Rectangle(70, 0, 70, 86),
-                    Origin = new Vector2(0, 0),
-                });
-
-        PlayerEntity.AddComponent<TransformComponent>(new TransformComponent() { 
-                    Position = position,
-                    Size = new Vector2(70 * 4, 86 * 4)
-                });
+        PlayerEntity.AddComponent<RenderComponent>(new RenderComponent());
+        PlayerEntity.AddComponent<TransformComponent>(new TransformComponent());
+        PlayerEntity.AddComponent<StateComponent>(new StateComponent());
+        PlayerEntity.AddComponent<AnimationComponent>(new AnimationComponent());
 
         return PlayerEntity;
     }
