@@ -8,13 +8,17 @@ class EntityTemplates
         Entity PlayerEntity = new();
         PlayerEntity.AddComponent<RenderComponent>(new RenderComponent() { 
                     Texture = texture,
-                    SourceRect = new Rectangle(70, 0, 70, 86),
+                    SourceRect = new Rectangle(86, 0, 86, 86),
                     Origin = new Vector2(0, 0),
                 });
 
         PlayerEntity.AddComponent<TransformComponent>(new TransformComponent() { 
                     Position = new Vector2(0, 0),
-                    Size = new Vector2(70 * 4, 86 * 4)
+                    Size = new Vector2(86 * 4, 86 * 4)
+                });
+
+        PlayerEntity.AddComponent<StateComponent>(new StateComponent() { 
+                    CurrentState = State.Attack3 
                 });
 
         return PlayerEntity;
