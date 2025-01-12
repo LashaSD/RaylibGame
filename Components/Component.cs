@@ -2,9 +2,6 @@ public abstract class Component
 {
     public Entity? ParentEntity {get; private set;}
 
-    public virtual void Init()
-    {}
-
     public virtual void Update(float deltaTime)
     {}
 

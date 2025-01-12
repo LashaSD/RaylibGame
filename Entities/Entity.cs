@@ -9,14 +9,17 @@ public class Entity
         if (!this.Components.ContainsKey(typeof(T)))
         {
             component.SetEntity(this);
-            component.Init();
             this.Components.Add(typeof(T), component);
         }
     }
 
-    public T? TryGetComponent<T>() where T : Component
+    public T GetComponent<T>() where T : Component
     {
-        return this.Components.TryGetValue(typeof(T), out var component) ? (T)component : null;
+        if (!this.Components.ContainsKey(typeof(T)))
+        {
+            return null;
+        }
+        return (T) this.Components[typeof(T)];
     }
 
     public void Update(float deltaTime)
