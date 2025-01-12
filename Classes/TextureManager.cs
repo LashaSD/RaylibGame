@@ -55,4 +55,12 @@ public static class TextureManager
                     SpriteHeight 
                 );
     }
+
+    public static Rectangle GetTerrainTile(int i, int j)
+    {
+        float SpriteWidth = 16.0f;
+        float SpriteHeight = 16.0f;
+
+        return new Rectangle(i * SpriteWidth, j * SpriteHeight, SpriteWidth, SpriteHeight);
+    }
 }

@@ -23,12 +23,9 @@ public class StateComponent : Component
 
     public void SetState(State newState)
     {
-        if (this.CurrentState != newState)
-        {
-            this.CurrentState = newState;
-            this.OnStateChanged(newState);
-            this.StateChanged.Fire(newState);
-        }
+        this.CurrentState = newState;
+        this.OnStateChanged(newState);
+        this.StateChanged.Fire(newState);
     }
 
     public StateComponent()
@@ -72,7 +69,7 @@ public class StateComponent : Component
             State.Attack1 => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 2.5f),
             State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.5f, true),
             State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f),
-            State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f),
+            State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 1.25f),
             State.Run_Attack => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f, true),
             _ => new Animation(new KeyFrames((Texture2D)textureDefault, (Rectangle) spriteRectDefault), 2.5f),
         };
