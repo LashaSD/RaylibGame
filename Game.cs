@@ -25,6 +25,7 @@ class Entry
         while (!Raylib.WindowShouldClose())
         {
             // Input
+            InputSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
             // Rendering
             Raylib.BeginDrawing();

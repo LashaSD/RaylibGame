@@ -10,6 +10,8 @@ class EntityTemplates
         PlayerEntity.AddComponent<TransformComponent>(new TransformComponent());
         PlayerEntity.AddComponent<StateComponent>(new StateComponent());
         PlayerEntity.AddComponent<AnimationComponent>(new AnimationComponent());
+        PlayerEntity.AddComponent<ActionComponent>(new ActionComponent());
+        PlayerEntity.AddComponent<InputComponent>(new InputComponent());
 
         return PlayerEntity;
     }
