@@ -16,7 +16,7 @@ class Entry
         Entity player = EntityTemplates.PlayerEntity();
         {
             TransformComponent? transform = player.GetComponent<TransformComponent>();
-            transform?.SetScale(new Vector2(4, 4));
+            transform?.SetScale(new Vector2(2, 2));
 
             StateComponent? playerState = player.GetComponent<StateComponent>();
             playerState?.SetState(State.Run);
@@ -26,6 +26,7 @@ class Entry
         {
             // Input
             InputSystem.Update(Raylib.GetFrameTime());
+            ActionSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
             // Rendering
             Raylib.BeginDrawing();

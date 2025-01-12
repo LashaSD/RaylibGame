@@ -9,6 +9,7 @@ public class Entity
         if (!this.Components.ContainsKey(typeof(T)))
         {
             component.SetEntity(this);
+            component.Init();
             this.Components.Add(typeof(T), component);
         }
     }

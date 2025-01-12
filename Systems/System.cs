@@ -21,3 +21,4 @@ class RenderSystem : BaseSystem<RenderComponent> { }
 class AnimationSystem : BaseSystem<AnimationComponent> { }
 class StateSystem : BaseSystem<StateComponent> { }
 class InputSystem : BaseSystem<InputComponent> { }
+class ActionSystem : BaseSystem<ActionComponent> { }

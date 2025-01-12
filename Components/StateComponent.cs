@@ -72,6 +72,8 @@ public class StateComponent : Component
             State.Attack1 => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 2.5f),
             State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.5f, true),
             State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f),
+            State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f),
+            State.Run_Attack => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f, true),
             _ => new Animation(new KeyFrames((Texture2D)textureDefault, (Rectangle) spriteRectDefault), 2.5f),
         };
     }

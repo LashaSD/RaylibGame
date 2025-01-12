@@ -2,6 +2,10 @@ public abstract class Component
 {
     public Entity? ParentEntity {get; private set;}
 
+    // Initialized only when the Component is added to an Entity
+    public virtual void Init()
+    {}
+
     public virtual void Update(float deltaTime)
     {}
 
