@@ -26,10 +26,20 @@ class PhysicsSystem
 
     public static Body CreateStaticBody(Vector2 position, float width, float height, float density)
     {
-        var body = BodyFactory.CreateRectangle(PhysicsWorld, width, height, density);
-        body.Position = position;
+        Body body = BodyFactory.CreateRectangle(PhysicsWorld, width, height, density);
         body.BodyType = BodyType.Static;
+        body.Position = position;
         return body;
+    }
+
+    public static Vector2 NumericToMicrosoft(System.Numerics.Vector2 vec)
+    {
+        return new Vector2(vec.X, vec.Y);
+    }
+
+    public static System.Numerics.Vector2 MicrosoftToNumeric(Vector2 vec)
+    {
+        return new System.Numerics.Vector2(vec.X, vec.Y);
     }
 }
 

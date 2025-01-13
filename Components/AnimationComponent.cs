@@ -19,11 +19,13 @@ public class AnimationComponent : Component
             return;
 
         this.CurrentAnimation.Update(deltaTime);
+
         RenderComponent? renderComponent = this.ParentEntity?.GetComponent<RenderComponent>();
-        if (renderComponent is not null)
-        {
-            renderComponent.Texture = this.CurrentAnimation.AnimKeyFrames.Texture;
-            renderComponent.SourceRect = this.CurrentAnimation.AnimKeyFrames.SpriteRect;
-        }
+        Sprite sprite = new Sprite(
+            this.CurrentAnimation.AnimKeyFrames.Texture,
+            this.CurrentAnimation.AnimKeyFrames.SpriteRect
+        );
+
+        renderComponent?.SetSprite(sprite);
     }
 }

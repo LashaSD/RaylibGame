@@ -1,5 +1,5 @@
 ﻿using Raylib_cs;
-using Microsoft.Xna.Framework;
+using System.Numerics;
 
 class Entry 
 {
@@ -13,11 +13,7 @@ class Entry
 
         TextureManager.LoadTextures();
 
-        Entity player = EntityTemplates.PlayerEntity(new Vector2(100, WindowHeight - 250), new Vector2(80, 86));
-        {
-            StateComponent? playerState = player.GetComponent<StateComponent>();
-            playerState?.SetState(State.Run);
-        }
+        Entity player = EntityTemplates.PlayerEntity(new Vector2(100, 100), new Vector2(80.0f, 86.0f));
 
         Entity floor = EntityTemplates.FloorEntity(new Vector2(0, WindowHeight - 100), new Vector2(WindowWidth, 100));
         {
@@ -28,8 +24,8 @@ class Entry
             Rectangle sourceRect = TextureManager.GetTerrainTile(0, 0);
 
             RenderComponent? renderComponent = floor.GetComponent<RenderComponent>();
-            renderComponent?.SetTexture((Texture2D) terrainTexture);
-            renderComponent?.SetSourceRect(sourceRect);
+            renderComponent?.SetSprite(new Sprite((Texture2D) terrainTexture, sourceRect));
+            renderComponent?.Sprite?.SetScaleForSize(new System.Numerics.Vector2(WindowWidth, 100));
         }
 
         while (!Raylib.WindowShouldClose())
@@ -47,6 +43,7 @@ class Entry
             Raylib.EndDrawing();
             // Physics
             PhysicsSystem.Update(Raylib.GetFrameTime());
+            DynamicBodySystem.Update(Raylib.GetFrameTime());
         }
 
         Raylib.CloseWindow();

@@ -3,75 +3,47 @@ using Microsoft.Xna.Framework;
 
 public class RenderComponent : Component
 {
-    public Texture2D Texture { get; set; }
-
-    public Rectangle SourceRect { get; set; }
-    public System.Numerics.Vector2 Origin { get; set; } = new System.Numerics.Vector2(0.0f, 0.0f);
-
+    public Sprite? Sprite { get; private set; }
     public Shader? Shader { get; set; }
 
-    public float Rotation { get; set; } = 0f;
-    public float ZIndex { get; set; } = 0f;
-
-    public bool Visible { get; set; } = true;
+    public TransformComponent? Transform;
 
     public RenderComponent()
     {
         RenderSystem.Register(this);
     }
 
-    public void SetSourceRect(Rectangle rect)
+    public void SetSprite(Sprite sprite)
     {
-        this.SourceRect = rect;
+        this.Sprite = sprite;
     }
 
-    public void SetTexture(Texture2D texture)
+    public override void Init()
     {
-        this.Texture = texture;
+        this.Transform = this.ParentEntity?.GetComponent<TransformComponent>();
     }
 
     public override void Update(float deltaTime)
     {
-        if (this.ParentEntity is null)
+        if (this.Transform is null || this.Sprite is null)
             return;
-
-        DynamicBodyComponent? dynamicBody = this.ParentEntity.GetComponent<DynamicBodyComponent>();
-        StaticBodyComponent? staticBody = this.ParentEntity.GetComponent<StaticBodyComponent>();
-
-        Vector2 Pos = new();
-        Vector2 Size = new();
-
-        if (dynamicBody is null && staticBody is null)
-            return;
-
-        if (dynamicBody is not null)
-        {
-            Pos = dynamicBody.PhysicsBody.Position;
-            Size = dynamicBody.Size;
-        }
-
-        if (staticBody is not null)
-        {
-            Pos = staticBody.PhysicsBody.Position;
-            Size = staticBody.Size;
-        }
 
         if (this.Shader.HasValue)
             Raylib.BeginShaderMode(this.Shader.Value);
 
         Rectangle posRect = new Rectangle(
-            Pos.X,
-            Pos.Y,
-            Size.X,
-            Size.Y
+            this.Transform.Position.X,
+            this.Transform.Position.Y,
+            this.Sprite.Size.X * this.Sprite.Scale.X,
+            this.Sprite.Size.Y * this.Sprite.Scale.Y
         );
-
+        
         Raylib.DrawTexturePro(
-            this.Texture,
-            this.SourceRect,
+            this.Sprite.Texture,
+            this.Sprite.SourceRect,
             posRect,
-            this.Origin,
-            this.Rotation,
+            this.Sprite.Origin,
+            this.Transform.Rotation,
             Color.White
         );
 

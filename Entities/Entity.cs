@@ -9,7 +9,6 @@ public class Entity
         if (!this.Components.ContainsKey(typeof(T)))
         {
             component.SetEntity(this);
-            component.Init();
             this.Components.Add(typeof(T), component);
         }
     }
@@ -23,11 +22,15 @@ public class Entity
         return (T) this.Components[typeof(T)];
     }
 
+    public void Init()
+    {
+        foreach (Component component in this.Components.Values)
+            component.Init();
+    }
+
     public void Update(float deltaTime)
     {
         foreach (Component component in this.Components.Values)
-        {
             component.Update(deltaTime);
-        }
     }
 }

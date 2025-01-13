@@ -1,17 +1,32 @@
-using Microsoft.Xna.Framework;
+using System.Numerics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 
 class DynamicBodyComponent : Component
 {
-    public Vector2 Pos { get; set; }
-    public Vector2 Size { get; set; }
-    public Body PhysicsBody { get; set; }
+    public TransformComponent? Transform;
+    public Vector2 BodySize;
+    public Body? PhysicsBody { get; set; }
 
-    public DynamicBodyComponent(Vector2 pos, Vector2 size, float density)
+    private float Density { get; set; }
+
+    public override void Init()
     {
-        this.Pos = pos;
-        this.Size = size;
-        this.PhysicsBody = PhysicsSystem.CreateDynamicBody(Pos, Size.X, Size.Y, density);
+        this.Transform = this.ParentEntity?.GetComponent<TransformComponent>();
+        if (this.Transform is not null)
+            this.PhysicsBody = PhysicsSystem.CreateDynamicBody(PhysicsSystem.NumericToMicrosoft(this.Transform.Position), this.BodySize.X, this.BodySize.Y, this.Density);
+    }
+
+    public override void Update(float deltaTime)
+    {
+        if (this.PhysicsBody is not null)
+            this.Transform?.SetPosition(PhysicsSystem.MicrosoftToNumeric(this.PhysicsBody.Position));
+    }
+
+    public DynamicBodyComponent(Vector2 size, float density)
+    {
+        this.Density = density;
+        this.BodySize = size;
+        DynamicBodySystem.Register(this);
     }
 }

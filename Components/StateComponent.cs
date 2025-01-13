@@ -31,7 +31,12 @@ public class StateComponent : Component
     public StateComponent()
     {
         StateSystem.Register(this);
+    }
+
+    public override void Init()
+    {
         this.SetState(State.Idle);
+        this.OnStateChanged(State.Idle);
     }
 
     private void OnStateChanged(State newState) 
@@ -68,7 +73,7 @@ public class StateComponent : Component
         {
             State.Attack1 => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 2.5f),
             State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.5f, true),
-            State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f),
+            State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 0.01f),
             State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 1.25f),
             State.Run_Attack => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f, true),
             _ => new Animation(new KeyFrames((Texture2D)textureDefault, (Rectangle) spriteRectDefault), 2.5f),

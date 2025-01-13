@@ -25,14 +25,14 @@ public class JumpAction : IAction
         if (dynamicBody is null)
             return;
 
-        dynamicBody.PhysicsBody.ApplyLinearImpulse(new Vector2(0, (float) -5e15));
+        // dynamicBody.PhysicsBody.ApplyLinearImpulse(new Vector2(0, (float) -5e15));
     }
 }
 
 public class MoveRightAction : IAction
 {
     public override State? PostExecutionState { get; protected set; } = State.Run;
-    public override float? Duration { get; protected set; } = 0.0f;
+    public override float? Duration { get; protected set; } = 0.15f;
     public override float? DebounceTime { get; protected set; } = 0.0f;
 
     public override void Execute(Entity entity)
@@ -42,7 +42,7 @@ public class MoveRightAction : IAction
         if (dynamicBody is null)
             return;
 
-        dynamicBody.PhysicsBody.ApplyForce(new Vector2((float) 5e12, 0));
+        // dynamicBody.PhysicsBody.ApplyForce(new Vector2((float) 5e12, 0));
     }
 }
 
@@ -59,7 +59,7 @@ public class MoveLeftAction : IAction
         if (dynamicBody is null)
             return;
 
-        dynamicBody.PhysicsBody.ApplyForce(new Vector2((float) -5e12, 0));
+        // dynamicBody.PhysicsBody.ApplyForce(new Vector2((float) -5e12, 0));
     }
 }
 

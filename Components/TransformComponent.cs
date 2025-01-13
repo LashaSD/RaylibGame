@@ -1,13 +1,14 @@
-using Microsoft.Xna.Framework;
+using System.Numerics;
 
 public class TransformComponent : Component
 {
-    public Vector2 Pos = new();
-    public Vector2 Scale = new Vector2(1.0f, 1.0f);
+    public Vector2 Position { get; private set; }
+    public Vector2 Scale { get; private set; } = new Vector2(1, 1);
+    public float Rotation { get; set; } =  0.0f;
 
-    public void SetPos(Vector2 position)
+    public void SetPosition(Vector2 pos)
     {
-        this.Pos = position;
+        this.Position = pos;
     }
 
     public void SetScale(Vector2 scale)
@@ -15,8 +16,20 @@ public class TransformComponent : Component
         this.Scale = scale;
     }
 
+    public void SetTransform(Vector2 pos, Vector2 scale)
+    {
+        this.Position = pos;
+        this.Scale = scale;
+    }
+
     public TransformComponent()
     {
+        TransformSystem.Register(this);
+    }
+
+    public TransformComponent(Vector2 pos, Vector2 scale)
+    {
+        this.SetTransform(pos, scale);
         TransformSystem.Register(this);
     }
 }
