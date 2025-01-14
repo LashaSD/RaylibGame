@@ -22,14 +22,25 @@ public class TransformComponent : Component
         this.Scale = scale;
     }
 
+    public void SetRotation(float rotation)
+    {
+        this.Rotation = rotation;
+    }
+
     public TransformComponent()
     {
         TransformSystem.Register(this);
     }
 
+    public TransformComponent(Vector2 pos)
+        : this()
+    {
+        this.SetPosition(pos);
+    }
+
     public TransformComponent(Vector2 pos, Vector2 scale)
+        : this()
     {
         this.SetTransform(pos, scale);
-        TransformSystem.Register(this);
     }
 }

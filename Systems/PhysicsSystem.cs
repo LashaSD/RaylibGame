@@ -4,7 +4,12 @@ using Microsoft.Xna.Framework;
 
 class PhysicsSystem
 {
-    public static World PhysicsWorld { get; private set; } = new World(new Vector2(0, 9.8f * 15));
+    public static World PhysicsWorld { get; private set; } = new World(new Vector2(0, 9.8f));
+
+    public static void Init()
+    {
+        FarseerPhysics.ConvertUnits.SetDisplayUnitToSimUnitRatio(100);
+    }
 
     public static void SetGravity(Vector2 gravity)
     {
@@ -32,14 +37,16 @@ class PhysicsSystem
         return body;
     }
 
-    public static Vector2 NumericToMicrosoft(System.Numerics.Vector2 vec)
+    public static System.Numerics.Vector2 GetPosition(Body body)
     {
-        return new Vector2(vec.X, vec.Y);
+        Vector2 pos = FarseerPhysics.ConvertUnits.ToDisplayUnits(body.Position);
+        return new System.Numerics.Vector2(pos.X, pos.Y);
     }
 
-    public static System.Numerics.Vector2 MicrosoftToNumeric(Vector2 vec)
+    public static Vector2 ToSimUnits(System.Numerics.Vector2 vector)
     {
-        return new System.Numerics.Vector2(vec.X, vec.Y);
+        Vector2 simVector = FarseerPhysics.ConvertUnits.ToSimUnits(new Vector2(vector.X, vector.Y));
+        return simVector;
     }
 }
 

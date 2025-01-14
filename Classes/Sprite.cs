@@ -6,7 +6,7 @@ public class Sprite
     public Texture2D Texture { get; }
     public Rectangle SourceRect { get; }
 
-    public Vector2 Origin { get; } = new Vector2(0.0f, 0.0f);
+    public Vector2 Origin { get; } = new Vector2(0.5f, 0.5f);
     public Vector2 Size { get => new Vector2(this.SourceRect.Width, this.SourceRect.Height); }
     public Vector2 Scale { get; private set; } = new Vector2(1.0f, 1.0f);
 
@@ -20,5 +20,10 @@ public class Sprite
     public void SetScaleForSize(Vector2 size)
     {
         this.Scale = size / this.Size;
+    }
+
+    public void SetScale(Vector2 size)
+    {
+        this.Scale = size;
     }
 }

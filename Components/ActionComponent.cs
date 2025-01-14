@@ -1,12 +1,12 @@
 using Raylib_cs;
-using Microsoft.Xna.Framework;
+using System.Numerics;
 
 public abstract class IAction
 {
+    public virtual State? PreExecutionState { get; protected set; }
     public virtual State? PostExecutionState { get; protected set; }
     public virtual float? Duration { get; protected set; }
     public virtual float? DebounceTime { get; protected set; } = 0.25f;
-    public virtual Func<bool>? TerminationCondition { get; protected set; }
 
     public virtual void Execute(Entity entity)
     { }
@@ -25,41 +25,7 @@ public class JumpAction : IAction
         if (dynamicBody is null)
             return;
 
-        // dynamicBody.PhysicsBody.ApplyLinearImpulse(new Vector2(0, (float) -5e15));
-    }
-}
-
-public class MoveRightAction : IAction
-{
-    public override State? PostExecutionState { get; protected set; } = State.Run;
-    public override float? Duration { get; protected set; } = 0.15f;
-    public override float? DebounceTime { get; protected set; } = 0.0f;
-
-    public override void Execute(Entity entity)
-    {
-        DynamicBodyComponent? dynamicBody = entity.GetComponent<DynamicBodyComponent>();
-
-        if (dynamicBody is null)
-            return;
-
-        // dynamicBody.PhysicsBody.ApplyForce(new Vector2((float) 5e12, 0));
-    }
-}
-
-public class MoveLeftAction : IAction
-{
-    public override State? PostExecutionState { get; protected set; } = State.Run;
-    public override float? Duration { get; protected set; } = 0.15f;
-    public override float? DebounceTime { get; protected set; } = 0.0f;
-
-    public override void Execute(Entity entity)
-    {
-        DynamicBodyComponent? dynamicBody = entity.GetComponent<DynamicBodyComponent>();
-
-        if (dynamicBody is null)
-            return;
-
-        // dynamicBody.PhysicsBody.ApplyForce(new Vector2((float) -5e12, 0));
+        dynamicBody.PhysicsBody?.ApplyForce(PhysicsSystem.ToSimUnits(new Vector2(0, -20000f)));
     }
 }
 

@@ -10,13 +10,12 @@ class EntityTemplates
         PlayerEntity.AddComponent<AnimationComponent>(new AnimationComponent());
         PlayerEntity.AddComponent<ActionComponent>(new ActionComponent());
         PlayerEntity.AddComponent<InputComponent>(new InputComponent());
-        PlayerEntity.AddComponent<DynamicBodyComponent>(new DynamicBodyComponent(new Vector2(72, 86), 80f));
+        PlayerEntity.AddComponent<DynamicBodyComponent>(new DynamicBodyComponent(new Vector2(scale.X, scale.Y), FarseerPhysics.ConvertUnits.ToSimUnits(80)));
 
         RenderComponent renderComponent = new();
         PlayerEntity.AddComponent<RenderComponent>(renderComponent);
 
-        TransformComponent Transform = new();
-        Transform.SetPosition(pos);
+        TransformComponent Transform = new(pos, new Vector2(1, 1));
         PlayerEntity.AddComponent<TransformComponent>(Transform);
 
         PlayerEntity.Init();
@@ -24,17 +23,16 @@ class EntityTemplates
         return PlayerEntity;
     }
 
-    public static Entity KnightEntity(Vector2 pos)
+    public static Entity KnightEntity(Vector2 pos, Vector2 scale)
     {
-        Texture2D? knightTexture = TextureManager.TryGetTexture("Idle.png");
-
         Entity Knight = new();
+
         Knight.AddComponent<RenderComponent>(new RenderComponent());
+        Knight.AddComponent<TransformComponent>(new TransformComponent(pos));
         Knight.AddComponent<StateComponent>(new StateComponent());
         Knight.AddComponent<AnimationComponent>(new AnimationComponent());
-        Knight.AddComponent<ActionComponent>(new ActionComponent());
-        Knight.AddComponent<InputComponent>(new InputComponent());
-        // Knight.AddComponent<DynamicBodyComponent>(new DynamicBodyComponent(25.0f));
+        Knight.AddComponent<DynamicBodyComponent>(new DynamicBodyComponent(new Vector2(scale.X, scale.Y), 80f));
+
         Knight.Init();
 
         return Knight;

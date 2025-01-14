@@ -1,10 +1,10 @@
 using System.Numerics;
 using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
 
 class DynamicBodyComponent : Component
 {
     public TransformComponent? Transform;
+
     public Vector2 BodySize;
     public Body? PhysicsBody { get; set; }
 
@@ -14,13 +14,18 @@ class DynamicBodyComponent : Component
     {
         this.Transform = this.ParentEntity?.GetComponent<TransformComponent>();
         if (this.Transform is not null)
-            this.PhysicsBody = PhysicsSystem.CreateDynamicBody(PhysicsSystem.NumericToMicrosoft(this.Transform.Position), this.BodySize.X, this.BodySize.Y, this.Density);
+        {
+            var bodySize = PhysicsSystem.ToSimUnits(this.BodySize);
+            this.PhysicsBody = PhysicsSystem.CreateDynamicBody(PhysicsSystem.ToSimUnits(this.Transform.Position), bodySize.X, bodySize.Y, this.Density);
+        }
     }
 
     public override void Update(float deltaTime)
     {
         if (this.PhysicsBody is not null)
-            this.Transform?.SetPosition(PhysicsSystem.MicrosoftToNumeric(this.PhysicsBody.Position));
+        {
+            this.Transform?.SetPosition(PhysicsSystem.GetPosition(this.PhysicsBody));
+        }
     }
 
     public DynamicBodyComponent(Vector2 size, float density)

@@ -13,9 +13,9 @@ class Entry
 
         TextureManager.LoadTextures();
 
-        Entity player = EntityTemplates.PlayerEntity(new Vector2(100, 100), new Vector2(80.0f, 86.0f));
+        Entity player = EntityTemplates.PlayerEntity(new Vector2(100, WindowHeight - 250), new Vector2(80.0f, 86.0f));
 
-        Entity floor = EntityTemplates.FloorEntity(new Vector2(0, WindowHeight - 100), new Vector2(WindowWidth, 100));
+        Entity floor = EntityTemplates.FloorEntity(new Vector2(WindowWidth / 2, WindowHeight - 50), new Vector2(WindowWidth, 100));
         {
             Texture2D? terrainTexture = TextureManager.TryGetTexture("TerrainTexture.png");
             if (terrainTexture is null)

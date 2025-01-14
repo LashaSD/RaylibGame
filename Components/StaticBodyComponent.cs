@@ -21,9 +21,12 @@ class StaticBodyComponent : Component
     {
         this.Transform = this.ParentEntity?.GetComponent<TransformComponent>();
         if (this.Transform is not null)
-            this.PhysicsBody = PhysicsSystem.CreateStaticBody(PhysicsSystem.NumericToMicrosoft(this.Transform.Position), this.BodySize.X, this.BodySize.Y, this.Density);
+        {
+            var bodySize = PhysicsSystem.ToSimUnits(this.BodySize);
+            this.PhysicsBody = PhysicsSystem.CreateStaticBody(PhysicsSystem.ToSimUnits(this.Transform.Position), bodySize.X, bodySize.Y, this.Density);
+        }
 
         if (this.PhysicsBody is not null)
-            this.Transform?.SetPosition(PhysicsSystem.MicrosoftToNumeric(this.PhysicsBody.Position));
+            this.Transform?.SetPosition(PhysicsSystem.GetPosition(this.PhysicsBody));
     }
 }
