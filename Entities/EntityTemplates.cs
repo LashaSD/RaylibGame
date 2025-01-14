@@ -10,6 +10,7 @@ class EntityTemplates
         PlayerEntity.AddComponent<AnimationComponent>(new AnimationComponent());
         PlayerEntity.AddComponent<ActionComponent>(new ActionComponent());
         PlayerEntity.AddComponent<InputComponent>(new InputComponent());
+        PlayerEntity.AddComponent<MovementComponent>(new MovementComponent());
         PlayerEntity.AddComponent<DynamicBodyComponent>(new DynamicBodyComponent(new Vector2(scale.X, scale.Y), FarseerPhysics.ConvertUnits.ToSimUnits(80)));
 
         RenderComponent renderComponent = new();
@@ -17,6 +18,7 @@ class EntityTemplates
 
         TransformComponent Transform = new(pos, new Vector2(1, 1));
         PlayerEntity.AddComponent<TransformComponent>(Transform);
+
 
         PlayerEntity.Init();
 

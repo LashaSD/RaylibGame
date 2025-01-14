@@ -16,11 +16,11 @@ public class InputComponent : Component
         if (actionComponent is null)
             return;
 
-        foreach (KeyboardKey key in Settings.Keybinds.Keys)
+        foreach (KeyboardKey key in Settings.ActionKeybinds.Keys)
         {
             if (Raylib.IsKeyDown(key))
             {
-                actionComponent.Execute(Settings.Keybinds[key]);
+                actionComponent.Execute(Settings.ActionKeybinds[key]);
             }
         }
     }

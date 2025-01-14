@@ -32,11 +32,12 @@ class Entry
         {
             // Input & Other Systems
             InputSystem.Update(Raylib.GetFrameTime());
+            MovementSystem.Update(Raylib.GetFrameTime());
             ActionSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
             // Rendering
             Raylib.BeginDrawing();
-                Raylib.ClearBackground(Color.White);
+                Raylib.ClearBackground(Color.Blue);
                 Raylib.DrawFPS(8, WindowHeight - 16 - 8);
 
                 RenderSystem.Update(Raylib.GetFrameTime());
