@@ -61,6 +61,6 @@ public static class TextureManager
         float SpriteWidth = 16.0f;
         float SpriteHeight = 16.0f;
 
-        return new Rectangle(i * SpriteWidth, j * SpriteHeight, SpriteWidth, SpriteHeight);
+        return new Rectangle(j * SpriteWidth, i * SpriteHeight, SpriteWidth, SpriteHeight);
     }
 }

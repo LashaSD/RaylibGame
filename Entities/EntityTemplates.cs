@@ -1,4 +1,3 @@
-using Raylib_cs;
 using System.Numerics;
 
 class EntityTemplates
@@ -45,13 +44,15 @@ class EntityTemplates
         Entity Floor = new();
 
         RenderComponent renderComponent = new RenderComponent();
-        renderComponent.Sprite?.SetScaleForSize(new System.Numerics.Vector2(size.X, size.Y));
+        renderComponent.Sprite?.SetScaleForSize(new Vector2(size.X, size.Y));
         Floor.AddComponent<RenderComponent>(renderComponent);
 
-        Floor.AddComponent<StaticBodyComponent>(new StaticBodyComponent(size, 50.0f));
+        Floor.AddComponent<StaticBodyComponent>(new StaticBodyComponent(size, 50.0f) { Friction = 200.0f });
+
         TransformComponent transform = new();
         transform.SetPosition(pos);
         Floor.AddComponent<TransformComponent>(transform);
+
         Floor.Init();
 
         return Floor;

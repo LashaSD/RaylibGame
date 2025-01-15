@@ -9,7 +9,7 @@ class Entry
     public static void Main(string[] args)
     {
         Raylib.InitWindow(WindowWidth, WindowHeight, "Game");
-        Raylib.SetTargetFPS(60);
+        Raylib.SetTargetFPS(144);
 
         TextureManager.LoadTextures();
 
@@ -21,7 +21,7 @@ class Entry
             if (terrainTexture is null)
                 throw new Exception("Failed to fetch terrain textures");
 
-            Rectangle sourceRect = TextureManager.GetTerrainTile(0, 0);
+            Rectangle sourceRect = TextureManager.GetTerrainTile(29, 0);
 
             RenderComponent? renderComponent = floor.GetComponent<RenderComponent>();
             renderComponent?.SetSprite(new Sprite((Texture2D) terrainTexture, sourceRect));
@@ -32,15 +32,16 @@ class Entry
         {
             // Input & Other Systems
             InputSystem.Update(Raylib.GetFrameTime());
-            MovementSystem.Update(Raylib.GetFrameTime());
             ActionSystem.Update(Raylib.GetFrameTime());
+            MovementSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
             // Rendering
             Raylib.BeginDrawing();
-                Raylib.ClearBackground(Color.Blue);
-                Raylib.DrawFPS(8, WindowHeight - 16 - 8);
+                Raylib.ClearBackground(Color.Black);
 
                 RenderSystem.Update(Raylib.GetFrameTime());
+
+                Raylib.DrawFPS(8, WindowHeight - 16 - 8);
             Raylib.EndDrawing();
             // Physics
             PhysicsSystem.Update(Raylib.GetFrameTime());

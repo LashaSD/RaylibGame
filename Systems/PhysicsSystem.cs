@@ -37,15 +37,46 @@ class PhysicsSystem
         return body;
     }
 
+    public static Fixture CreateGroundSensor(Body body, float width, float height)
+    {
+        Fixture sensor = FixtureFactory.AttachRectangle(
+            width,
+            height,
+            0,
+            offset: new Vector2(0, body.FixtureList[0].Shape.Radius + height / 2 + 0.5f),
+            body
+        );
+
+        sensor.IsSensor = true;
+        return sensor;
+    }
+
     public static System.Numerics.Vector2 GetPosition(Body body)
     {
         Vector2 pos = FarseerPhysics.ConvertUnits.ToDisplayUnits(body.Position);
         return new System.Numerics.Vector2(pos.X, pos.Y);
     }
 
+    public static System.Numerics.Vector2 GetVelocity(Body body)
+    {
+        Vector2 pos = FarseerPhysics.ConvertUnits.ToDisplayUnits(body.LinearVelocity);
+        return new System.Numerics.Vector2(pos.X, pos.Y);
+    }
+
     public static Vector2 ToSimUnits(System.Numerics.Vector2 vector)
     {
         Vector2 simVector = FarseerPhysics.ConvertUnits.ToSimUnits(new Vector2(vector.X, vector.Y));
+        return simVector;
+    }
+
+    public static float ToSimUnits(float num)
+    {
+        return FarseerPhysics.ConvertUnits.ToSimUnits(num);
+    }
+
+    public static Vector2 AsSimUnits(System.Numerics.Vector2 vector)
+    {
+        Vector2 simVector = new Vector2(vector.X, vector.Y);
         return simVector;
     }
 }

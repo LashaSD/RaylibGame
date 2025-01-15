@@ -4,7 +4,7 @@ using System.Numerics;
 public class Sprite
 {
     public Texture2D Texture { get; }
-    public Rectangle SourceRect { get; }
+    public Rectangle SourceRect { get; private set; }
 
     public Vector2 Origin { get; } = new Vector2(0.5f, 0.5f);
     public Vector2 Size { get => new Vector2(this.SourceRect.Width, this.SourceRect.Height); }

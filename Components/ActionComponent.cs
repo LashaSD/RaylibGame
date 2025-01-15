@@ -7,6 +7,7 @@ public abstract class IAction
     public virtual State? PostExecutionState { get; protected set; }
     public virtual float? Duration { get; protected set; }
     public virtual float? DebounceTime { get; protected set; } = 0.25f;
+    public virtual Func<bool>? TerminationCondition { get; protected set; }
 
     public virtual void Execute(Entity entity)
     { }
@@ -16,16 +17,30 @@ public class JumpAction : IAction
 {
     public override State? PostExecutionState { get; protected set; } = State.Jump;
     public override float? Duration { get; protected set; } = 2.5f;
-    public override float? DebounceTime { get; protected set; } = 1.25f;
+    public override float? DebounceTime { get; protected set; }
+
+    private float JumpLength = 2.5f;
 
     public override void Execute(Entity entity)
     {
         DynamicBodyComponent? dynamicBody = entity.GetComponent<DynamicBodyComponent>();
 
-        if (dynamicBody is null)
+        if (dynamicBody is null || dynamicBody.PhysicsBody is null)
             return;
 
-        dynamicBody.PhysicsBody?.ApplyForce(PhysicsSystem.ToSimUnits(new Vector2(0, -20000f)));
+        if (!dynamicBody.IsGrounded)
+            return;
+
+        Vector2 impulse = new Vector2(0, -3.0f);
+        if (Math.Abs(dynamicBody.PhysicsBody.LinearVelocity.X) > 0.005f)
+            impulse += new Vector2(Math.Sign(dynamicBody.PhysicsBody.LinearVelocity.X) * this.JumpLength, 0);
+
+        Vector2 vel = PhysicsSystem.GetVelocity(dynamicBody.PhysicsBody);
+        Vector2 v0 = Vector2.Divide(impulse, dynamicBody.PhysicsBody.Mass);
+        this.DebounceTime = Math.Max(Math.Abs((2 * v0.Y) / PhysicsSystem.PhysicsWorld.Gravity.Y), 0.1f);
+        this.Duration = this.DebounceTime;
+
+        dynamicBody.PhysicsBody.ApplyLinearImpulse(PhysicsSystem.AsSimUnits(impulse));
     }
 }
 
@@ -79,15 +94,28 @@ public class ActionComponent : Component
 
         float duration = this.CurrentAction.Duration ?? 0.0f;
         float timeElapsed = (float) Raylib.GetTime() - this.ActionTimer;
+
         if (timeElapsed > duration)
         {
-            this.LastAction = this.CurrentAction;
-            this.LastActionTimer = this.ActionTimer;
-
-            this.CurrentAction = null;
-            this.ActionTimer = 0.0f;
-
-            this.StateComp?.SetState(State.Idle);
+            this.ResetAction();
+            return;
         }
+
+        if (this.CurrentAction.TerminationCondition?.Invoke() ?? false)
+            this.ResetAction();
+    }
+
+    private void ResetAction() 
+    {
+        if (this.CurrentAction is null)
+            return;
+
+        this.LastAction = this.CurrentAction;
+        this.LastActionTimer = this.ActionTimer;
+
+        this.CurrentAction = null;
+        this.ActionTimer = 0.0f;
+
+        this.StateComp?.SetState(State.Idle);
     }
 }

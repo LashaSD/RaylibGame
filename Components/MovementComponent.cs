@@ -6,9 +6,11 @@ public class MovementComponent : Component
     private DynamicBodyComponent? DynamicBodyComponent { get; set; }
     private StateComponent? StateComponent { get; set; }
 
-    public bool IsMoving { get; private set; } = false;
     public Vector2 MoveDirection { get; private set; } = new(0, 0);
-    public float Speed { get; private set; } = 500.0f;
+    public float Speed { get; private set; } = 2.5f;
+    public bool IsMoving { get; private set; } = false;
+
+    private float AirStrafingCoefficient = 0.75f;
 
     public MovementComponent()
     {
@@ -26,28 +28,43 @@ public class MovementComponent : Component
         if (this.ParentEntity is null)
             return;
 
+        if (this.DynamicBodyComponent is null || this.DynamicBodyComponent.PhysicsBody is null)
+            return;
+
         bool wasMoving = this.IsMoving;
         this.IsMoving = false;
 
+        Vector2 direction = Vector2.Zero; 
         foreach (KeyboardKey key in Settings.MovementKeybinds.Keys)
         {
             if (Raylib.IsKeyDown(key))
-            {
-                this.MoveDirection = Settings.MovementKeybinds[key];
-                this.IsMoving = true;
-            }
+                direction += Settings.MovementKeybinds[key];
+        }
+
+        if (direction != Vector2.Zero)
+        {
+            this.MoveDirection = Vector2.Normalize(direction);
+            this.IsMoving = true;
         }
 
         if (this.IsMoving)
         {
-            if (!wasMoving)
-                // Started Moving so change the State to moving
-                this.StateComponent?.SetState(State.Run);
+            Vector2 desiredVelocity = this.MoveDirection * this.Speed;
+            var vel = this.DynamicBodyComponent.PhysicsBody.LinearVelocity;
+            if (this.DynamicBodyComponent.IsGrounded)
+                this.DynamicBodyComponent.PhysicsBody.LinearVelocity = new(PhysicsSystem.AsSimUnits(desiredVelocity).X, vel.Y);
+            else
+                this.DynamicBodyComponent.PhysicsBody.LinearVelocity = new(PhysicsSystem.AsSimUnits(desiredVelocity).X * this.AirStrafingCoefficient, vel.Y);
 
-            this.DynamicBodyComponent?.PhysicsBody?.ApplyForce(PhysicsSystem.ToSimUnits(this.MoveDirection * this.Speed));
-        } else 
+            if (this.DynamicBodyComponent.IsGrounded && this.StateComponent?.CurrentState != State.Run && this.StateComponent?.CurrentState != State.Jump)
+                this.StateComponent?.SetState(State.Run);
+        } 
+        else 
         {
-            if (wasMoving)
+            if (!wasMoving)
+                return;
+
+            if (this.StateComponent is not null && this.StateComponent.CurrentState == State.Run)
                 // Stopped Moving so change the State to Idle
                 this.StateComponent?.SetState(State.Idle);
         }

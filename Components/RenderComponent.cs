@@ -8,6 +8,8 @@ public class RenderComponent : Component
 
     public TransformComponent? Transform;
 
+    public bool Mirror { get; set; } = false;
+
     public RenderComponent()
     {
         RenderSystem.Register(this);
@@ -47,10 +49,16 @@ public class RenderComponent : Component
             this.Sprite.Size.X * this.Sprite.Scale.X,
             this.Sprite.Size.Y * this.Sprite.Scale.Y
         );
+
+        Rectangle srcRect = this.Sprite.SourceRect;
+        if (this.Mirror)
+        {
+            srcRect.Width *= -1;
+        }
         
         Raylib.DrawTexturePro(
             this.Sprite.Texture,
-            this.Sprite.SourceRect,
+            srcRect,
             destRect,
             new Vector2(destRect.Width * this.Sprite.Origin.X, destRect.Height * this.Sprite.Origin.Y),
             this.Transform.Rotation,

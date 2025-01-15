@@ -9,6 +9,7 @@ class StaticBodyComponent : Component
     public Body? PhysicsBody { get; set; }
 
     private float Density { get; set; }
+    public float Friction { get; set; } = 25.0f;
 
 
     public StaticBodyComponent(Vector2 size, float density)
@@ -24,9 +25,12 @@ class StaticBodyComponent : Component
         {
             var bodySize = PhysicsSystem.ToSimUnits(this.BodySize);
             this.PhysicsBody = PhysicsSystem.CreateStaticBody(PhysicsSystem.ToSimUnits(this.Transform.Position), bodySize.X, bodySize.Y, this.Density);
+            this.PhysicsBody.Friction = FarseerPhysics.ConvertUnits.ToSimUnits(this.Friction);
         }
 
         if (this.PhysicsBody is not null)
+        {
             this.Transform?.SetPosition(PhysicsSystem.GetPosition(this.PhysicsBody));
+        }
     }
 }

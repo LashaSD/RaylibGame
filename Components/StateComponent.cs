@@ -52,7 +52,7 @@ public class StateComponent : Component
         Animation anim = MapStateToAnim(newState);
         animComponent.LoadAnim(anim);
         anim.Play();
-        Raylib.TraceLog(TraceLogLevel.Info, $"{newState}");
+        // Raylib.TraceLog(TraceLogLevel.Info, $"State: {newState}");
     }
 
     private Animation MapStateToAnim(State state)
@@ -74,7 +74,7 @@ public class StateComponent : Component
             State.Attack1 => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 2.5f),
             State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.5f, true),
             State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 0.01f),
-            State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 1.25f),
+            State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 1.13f),
             State.Run_Attack => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f, true),
             _ => new Animation(new KeyFrames((Texture2D)textureDefault, (Rectangle) spriteRectDefault), 2.5f),
         };
