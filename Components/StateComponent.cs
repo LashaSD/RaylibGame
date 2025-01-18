@@ -51,35 +51,8 @@ public class StateComponent : Component
         if (animComponent is null)
             return;
 
-        Animation anim = MapStateToAnim(newState);
+        Animation? anim = Settings.MapStateToAnim(this.Type, newState);
         animComponent.LoadAnim(anim);
         anim.Play();
-        // Raylib.TraceLog(TraceLogLevel.Info, $"State: {newState}");
     }
-
-    private Animation MapStateToAnim(State state)
-    {
-        Texture2D? textureDefault = TextureManager.TryGetTexture(String.Join(".", this.Type,"Idle.png"));
-        Rectangle? spriteRectDefault = TextureManager.GetNthSpriteRect(String.Join(".", this.Type,"Idle.png"), 1);
-
-        if (textureDefault is null || spriteRectDefault is null)
-            throw new Exception("Failed to fetch texture Idle.png");
-
-        Texture2D? texture = TextureManager.TryGetTexture(String.Join(".", this.Type,$"{state.ToString()}.png"));
-        Rectangle? spriteRect = TextureManager.GetNthSpriteRect(String.Join(".", this.Type,$"{state.ToString()}.png"), 1);
-
-        if (texture is null || spriteRect is null)
-            throw new Exception($"Failed to fetch texture {state}");
-
-        return state switch
-        {
-            State.Attack1 => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 2.5f),
-            State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.0f, true),
-            State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 0.01f),
-            State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 1.13f),
-            State.Run_Attack => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f, true),
-            _ => new Animation(new KeyFrames((Texture2D)textureDefault, (Rectangle) spriteRectDefault), 2.5f),
-        };
-    }
-
 }

@@ -81,3 +81,45 @@ public class Animation
         }
     }
 }
+
+public static class AnimationHelper
+{
+    public static Animation QuickAnim(string textureName, float duration, bool loop)
+    {
+        Texture2D? texture = TextureManager.TryGetTexture(textureName);
+        Rectangle? spriteRect = TextureManager.GetNthSpriteRect(textureName, 1);
+
+        if (texture is null || spriteRect is null)
+            throw new Exception($"Couldn't Load Animation Quickly {textureName}");
+        
+        return new Animation(
+                    new KeyFrames(texture.Value, spriteRect.Value),
+                    duration,
+                    loop
+                );
+    }
+
+    public static Animation QuickAnim(AnimationData data)
+    {
+        Texture2D? texture = TextureManager.TryGetTexture(data.TextureName);
+        Rectangle? spriteRect = TextureManager.GetNthSpriteRect(data.TextureName, 1);
+
+        if (texture is null || spriteRect is null)
+            throw new Exception($"Couldn't Load Animation Quickly {data.TextureName}");
+        
+        return new Animation(
+                    new KeyFrames(texture.Value, spriteRect.Value),
+                    data.Duration,
+                    data.Loop
+                );
+    }
+
+    public static AnimationData QuickAnimData(string textureName, float duration, bool loop)
+    {
+        return new AnimationData {
+            TextureName = textureName,
+            Duration = duration,
+            Loop = loop
+        };
+    }
+}

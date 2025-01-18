@@ -65,6 +65,20 @@
             "TextureFile": "PlayerKnight.Idle.png",
             "Type": 0,
             "Density": 80
+        },
+
+        {
+            "Position" : {
+                "X": 450, 
+                "Y": 100
+            },
+            "Size": {
+                "X": 80, 
+                "Y": 86
+            },
+            "TextureFile": "EnemyKnight.Idle.png",
+            "Type": 1,
+            "Density": 80
         }
     ]
 }
