@@ -13,7 +13,7 @@ public class Game
 
         TextureManager.LoadTextures();
 
-        GameWorld world = WorldReader.ReadFile();
+        GameWorld world = WorldReader.ReadFile("./Config/World.json");
         world.Construct();
 
         while (!Raylib.WindowShouldClose())

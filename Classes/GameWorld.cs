@@ -1,5 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public enum EntityType
 {
@@ -11,21 +13,38 @@ public enum EntityType
 
 public struct EntityData
 {
-    public string TextureFile;
+    [JsonPropertyName("TextureFile")]
+    public string TextureFile { get; set; }
 
-    // Grid of Sprite Segment Indices
-    public List<List<(int, int)>>? TileMap;
+    [JsonPropertyName("TileMap")]
+    public List<List<(int, int)>>? TileMap { get; set; }
 
-    public Vector2 Position;
-    public Vector2 Size;
-    public Vector2? Scale;
+    [JsonPropertyName("Position")]
+    public Vector2 Position { get; set; }
 
-    public float? Friction;
-    public float? Density;
+    [JsonPropertyName("Size")]
+    public Vector2 Size { get; set; }
 
-    public int? SpriteIndex;
+    [JsonPropertyName("Scale")]
+    public Vector2? Scale { get; set; }
 
-    public EntityType Type;
+    [JsonPropertyName("Friction")]
+    public float? Friction { get; set; }
+
+    [JsonPropertyName("Density")]
+    public float? Density { get; set; }
+
+    [JsonPropertyName("SpriteIndex")]
+    public int? SpriteIndex { get; set; }
+
+    [JsonPropertyName("Type")]
+    public EntityType Type { get; set; }
+}
+
+public class EntityDataContainer
+{
+    public List<EntityData> StaticEntities { get; set; } = new();
+    public List<EntityData> DynamicEntities { get; set; } = new();
 }
 
 public static class EntityFactory
@@ -136,7 +155,7 @@ public static class EntityFactory
 
         Entity e = new();
 
-        StateComponent state = new(eData.Type == EntityType.Player ? "PlayerKnight" : "EnemyKnight");
+        StateComponent state = new(charType);
         AnimationComponent anim = new();
         ActionComponent action = new();
         MovementComponent move = new();
@@ -181,12 +200,12 @@ public class GameWorld
     private List<EntityData> StaticBodies = new();
     private List<EntityData> DynamicBodies = new();
 
-    public void AddStaticBodies(params EntityData[] data)
+    public void AddStaticEntities(List<EntityData> data)
     {
         this.StaticBodies.AddRange(data);
     }
 
-    public void AddDynamicBodies(params EntityData[] data)
+    public void AddDynamicEntities(List<EntityData> data)
     {
         this.DynamicBodies.AddRange(data);
     }
@@ -206,55 +225,28 @@ public static class WorldReader
     const int WindowWidth = 1600;
     const int WindowHeight = 900;
 
-    public static GameWorld ReadFile()
+    public static EntityDataContainer AssignJsonData(string json){
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters =
+            {
+                new Vector2JsonConverter(),
+                new TileMapJsonConverter()
+            }
+        };
+
+        var jsonFile = File.ReadAllText(json);
+        return JsonSerializer.Deserialize<EntityDataContainer>(jsonFile, options) ?? throw new InvalidOperationException("Failed to parse JSON.");;
+    }
+
+    public static GameWorld ReadFile(string json)
     { 
+        EntityDataContainer JsonData = AssignJsonData(json);
         GameWorld world = new();
-        world.AddStaticBodies(
-            new EntityData() { 
-                Position = new Vector2(2400 / 2, WindowHeight - 50),
-                TileMap = new List<List<(int, int)>>() { 
-                    new List<(int, int)>() { (929, 10), (928, 40) },
-                    new List<(int, int)>() { (961, 50 )},
-                    new List<(int, int)>() { (961, 50 )},
-                    new List<(int, int)>() { (961, 50 )},
-                    new List<(int, int)>() { (993, 50 )},
-                    new List<(int, int)>() { (993, 50 )},
-                    new List<(int, int)>() { (993, 50 )},
-                },
-                TextureFile = "TerrainTexture.png",
-                Size = new Vector2(2400, 100),
-                Scale = new Vector2(3, 3),
-                Type = EntityType.Terrain,
-                Friction = 10 
-            },
 
-            new EntityData() { 
-                Position = new Vector2(48 * 4, WindowHeight - 100 - 144),
-                TileMap = new List<List<(int, int)>>() { 
-                    new List<(int, int)>() { (128, 1) },
-                    new List<(int, int)>() { (128, 1) },
-                    new List<(int, int)>() { (128, 1) },
-                    new List<(int, int)>() { (128, 1) },
-                    new List<(int, int)>() { (128, 1) },
-                    new List<(int, int)>() { (128, 1) },
-                },
-                TextureFile = "TerrainTexture.png",
-                Size = new Vector2(48, 288),
-                Scale = new Vector2(3, 3),
-                Type = EntityType.Terrain,
-                Friction = 10 
-            }
-        );
-
-        world.AddDynamicBodies(
-            new EntityData() {
-                Density = 80,
-                Position = new Vector2(200, 100),
-                Size = new Vector2(80, 86),
-                TextureFile = "PlayerKnight.Idle.png",
-                Type = EntityType.Player
-            }
-        );
+        world.AddStaticEntities(JsonData.StaticEntities);
+        world.AddDynamicEntities(JsonData.DynamicEntities);
 
         return world; 
     }
