@@ -13,9 +13,7 @@ public class MovementComponent : Component
     private float AirStrafingCoefficient = 0.75f;
 
     public MovementComponent()
-    {
-        MovementSystem.Register(this);
-    }
+    { }
 
     public override void Init()
     {
@@ -23,7 +21,7 @@ public class MovementComponent : Component
         this.StateComponent = this.ParentEntity?.GetComponent<StateComponent>();
     }
 
-    public override void Update(float deltaTime)
+    public void Update(float deltaTime, Vector2 direction)
     {
         if (this.ParentEntity is null)
             return;
@@ -33,14 +31,6 @@ public class MovementComponent : Component
 
         bool wasMoving = this.IsMoving;
         this.IsMoving = false;
-
-        Vector2 direction = Vector2.Zero; 
-        foreach (KeyboardKey key in Settings.MovementKeybinds.Keys)
-        {
-            if (Raylib.IsKeyDown(key))
-                direction += Settings.MovementKeybinds[key];
-        }
-
         if (direction != Vector2.Zero)
         {
             this.MoveDirection = Vector2.Normalize(direction);

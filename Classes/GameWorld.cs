@@ -98,7 +98,49 @@ public static class EntityFactory
 
     public static void ConstructDynamic(EntityData eData)
     {
+        if (eData.Density is null)
+            return;
 
+        Texture2D? texture = TextureManager.TryGetTexture(eData.TextureFile);
+        Rectangle? srcRect = TextureManager.GetNthSpriteRect(eData.TextureFile, 0);
+        if (texture is null || srcRect is null)
+            return;
+
+        Sprite sprite = new(texture.Value, srcRect.Value);
+
+        Entity e = new();
+
+        StateComponent state = new();
+        AnimationComponent anim = new();
+        ActionComponent action = new();
+        MovementComponent move = new();
+        DynamicBodyComponent dynamicBody = new(eData.Size, eData.Density.Value);
+        TransformComponent transform = new();
+        transform.SetPosition(eData.Position);
+
+        RenderComponent renderComponent = new();
+        renderComponent.SetSprite(sprite);
+
+        if (eData.Type == EntityType.Player)
+        {
+            InputComponent inputComponent = new();
+            e.AddComponent<InputComponent>(inputComponent);
+        }
+
+        if (eData.Type == EntityType.Enemy)
+        {
+            // Custom Logic
+        }
+
+        e.AddComponent<StateComponent>(state);
+        e.AddComponent<AnimationComponent>(anim);
+        e.AddComponent<ActionComponent>(action);
+        e.AddComponent<MovementComponent>(move);
+        e.AddComponent<DynamicBodyComponent>(dynamicBody);
+        e.AddComponent<TransformComponent>(transform);
+        e.AddComponent<RenderComponent>(renderComponent);
+
+        e.Init();
     }
 }
 
@@ -150,12 +192,19 @@ public static class WorldReader
             Size = new Vector2(2400, 100),
             Scale = new Vector2(3, 3),
             Type = EntityType.Terrain,
-            Friction = 0
+            Friction = 250 
         });
 
-        world.AddDynamicBodies(new EntityData() {
-            
-        });
+        world.AddDynamicBodies(
+                new EntityData() {
+                    Density = 80,
+                    Position = new Vector2(200, 100),
+                    Size = new Vector2(80, 86),
+                    TextureFile = "Idle.png",
+                    Type = EntityType.Player
+                }
+        );
+
         return world; 
     }
 }

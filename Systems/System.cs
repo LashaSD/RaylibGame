@@ -23,4 +23,3 @@ class StateSystem : BaseSystem<StateComponent> { }
 class InputSystem : BaseSystem<InputComponent> { }
 class ActionSystem : BaseSystem<ActionComponent> { }
 class DynamicBodySystem : BaseSystem<DynamicBodyComponent> { }
-class MovementSystem : BaseSystem<MovementComponent> { }

@@ -16,14 +16,11 @@ public class Game
         GameWorld world = WorldReader.ReadFile();
         world.Construct();
 
-        Entity player = EntityTemplates.PlayerEntity(new Vector2(100, WindowHeight - 250), new Vector2(80.0f, 86.0f));
-
         while (!Raylib.WindowShouldClose())
         {
             // Input & Other Systems
             InputSystem.Update(Raylib.GetFrameTime());
             ActionSystem.Update(Raylib.GetFrameTime());
-            MovementSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
             // Rendering
             Raylib.BeginDrawing();

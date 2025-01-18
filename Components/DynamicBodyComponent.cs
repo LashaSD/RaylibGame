@@ -59,7 +59,7 @@ class DynamicBodyComponent : Component
 
     public DynamicBodyComponent(Vector2 size, float density)
     {
-        this.Density = density;
+        this.Density = FarseerPhysics.ConvertUnits.ToSimUnits(density);
         this.BodySize = size;
         DynamicBodySystem.Register(this);
     }
