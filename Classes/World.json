@@ -1,0 +1,32 @@
+{
+    "StaticEntities": [
+        {
+            "Position": {
+                x: 2400 / 2, 
+                y: 900 - 50
+            },
+            "Size": {
+                x: 2400, 
+                y: 384
+            },
+            "TileMap": [
+                { (929, 50) },
+                { (961, 50) },
+                { (961, 50) },
+                { (961, 50) },
+                { (993, 50) },
+                { (993, 50) },
+                { (993, 50) }
+            ],
+            "TextureFile": "TerrainTexture.png",
+            "Scale": {
+                x: 3,
+                y: 3
+            },
+            "Type": "Terrain"
+        }
+    ],
+    "DynamicEntities": {
+        
+    }
+}

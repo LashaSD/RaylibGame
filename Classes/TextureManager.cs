@@ -63,4 +63,18 @@ public static class TextureManager
 
         return new Rectangle(j * SpriteWidth, i * SpriteHeight, SpriteWidth, SpriteHeight);
     }
+
+    public static Rectangle GetTerrainTileByIndex(int spriteIndex)
+    {
+        float TextureWidth = 512.0f;
+        float SpriteWidth = 16.0f;
+        float SpriteHeight = 16.0f;
+
+        int SpritesCol = (int) (TextureWidth / SpriteWidth);
+
+        int i = spriteIndex / SpritesCol;
+        int j = spriteIndex % SpritesCol;
+
+        return new Rectangle(j * SpriteWidth, i * SpriteHeight, SpriteWidth, SpriteHeight);
+    }
 }

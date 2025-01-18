@@ -1,7 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 
-class Entry 
+public class Game 
 {
     const int WindowWidth = 1600;
     const int WindowHeight = 900;
@@ -9,24 +9,14 @@ class Entry
     public static void Main(string[] args)
     {
         Raylib.InitWindow(WindowWidth, WindowHeight, "Game");
-        Raylib.SetTargetFPS(144);
+        Raylib.SetTargetFPS(60);
 
         TextureManager.LoadTextures();
 
+        GameWorld world = WorldReader.ReadFile();
+        world.Construct();
+
         Entity player = EntityTemplates.PlayerEntity(new Vector2(100, WindowHeight - 250), new Vector2(80.0f, 86.0f));
-
-        Entity floor = EntityTemplates.FloorEntity(new Vector2(WindowWidth / 2, WindowHeight - 50), new Vector2(WindowWidth, 100));
-        {
-            Texture2D? terrainTexture = TextureManager.TryGetTexture("TerrainTexture.png");
-            if (terrainTexture is null)
-                throw new Exception("Failed to fetch terrain textures");
-
-            Rectangle sourceRect = TextureManager.GetTerrainTile(29, 0);
-
-            RenderComponent? renderComponent = floor.GetComponent<RenderComponent>();
-            renderComponent?.SetSprite(new Sprite((Texture2D) terrainTexture, sourceRect));
-            renderComponent?.Sprite?.SetScaleForSize(new System.Numerics.Vector2(WindowWidth, 100));
-        }
 
         while (!Raylib.WindowShouldClose())
         {

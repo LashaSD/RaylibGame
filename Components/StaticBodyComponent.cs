@@ -8,14 +8,19 @@ class StaticBodyComponent : Component
     public Vector2 BodySize;
     public Body? PhysicsBody { get; set; }
 
-    private float Density { get; set; }
+    private float Density { get; set; } = 1.0f;
     public float Friction { get; set; } = 25.0f;
 
 
+    public StaticBodyComponent(Vector2 size)
+    {
+        this.BodySize = size;
+    }
+
     public StaticBodyComponent(Vector2 size, float density)
+        : this(size)
     {
         this.Density = density;
-        this.BodySize = size;
     }
 
     public override void Init()

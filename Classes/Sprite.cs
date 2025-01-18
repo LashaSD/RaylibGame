@@ -8,6 +8,7 @@ public class Sprite
 
     public Vector2 Origin { get; } = new Vector2(0.5f, 0.5f);
     public Vector2 Size { get => new Vector2(this.SourceRect.Width, this.SourceRect.Height); }
+    public Vector2 SizePx { get => new Vector2(this.SourceRect.Width * this.Scale.X, this.SourceRect.Height * this.Scale.Y); }
     public Vector2 Scale { get; private set; } = new Vector2(1.0f, 1.0f);
 
     public Sprite(Texture2D texture, Rectangle sourceRect)

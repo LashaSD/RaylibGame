@@ -19,7 +19,7 @@ public class JumpAction : IAction
     public override float? Duration { get; protected set; } = 2.5f;
     public override float? DebounceTime { get; protected set; }
 
-    private float JumpLength = 2.5f;
+    private float JumpLength = 1f;
 
     public override void Execute(Entity entity)
     {
