@@ -10,9 +10,11 @@ class DynamicBodyComponent : Component
     public Body? PhysicsBody { get; set; }
 
     private float Density { get; set; }
-    public bool IsGrounded { get; private set; }
+    public int Collisions { get; private set; } = 0;
+    public bool IsGrounded { get => Collisions > 0;  }
 
-    private Fixture? GroundSensor;
+
+    public Fixture? GroundSensor;
 
     public override void Init()
     {
@@ -24,7 +26,7 @@ class DynamicBodyComponent : Component
         var bodySize = PhysicsSystem.ToSimUnits(this.BodySize);
         this.PhysicsBody = PhysicsSystem.CreateDynamicBody(PhysicsSystem.ToSimUnits(this.Transform.Position), bodySize.X, bodySize.Y, this.Density);
 
-        this.GroundSensor = PhysicsSystem.CreateGroundSensor(this.PhysicsBody, bodySize.X, 0.1f);
+        this.GroundSensor = PhysicsSystem.CreateGroundSensor(this.PhysicsBody, bodySize.X, bodySize.Y);
         this.GroundSensor.OnCollision += this.OnGroundCollision;
         this.GroundSensor.OnSeparation += this.OnGroundSeparation;
     }
@@ -34,6 +36,7 @@ class DynamicBodyComponent : Component
         if (this.PhysicsBody is not null && this.Transform is not null)
         {
             this.Transform.SetPosition(PhysicsSystem.GetPosition(this.PhysicsBody));
+            this.Transform.SetRotation((float)(180 / Math.PI) * this.PhysicsBody.Rotation);
 
             if (this.RenderComponent is not null)
             {
@@ -48,13 +51,13 @@ class DynamicBodyComponent : Component
 
     private bool OnGroundCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
     {
-        this.IsGrounded = true;
+        this.Collisions++;
         return true;
     }
 
     private void OnGroundSeparation(Fixture fixtureA, Fixture fixtureB)
     {
-        this.IsGrounded = false;
+        this.Collisions--;
     }
 
     public DynamicBodyComponent(Vector2 size, float density)

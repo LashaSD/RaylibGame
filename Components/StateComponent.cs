@@ -20,6 +20,7 @@ public class StateComponent : Component
 {
     public Signal<State> StateChanged = new Signal<State>();
     public State CurrentState { get; private set; }
+    public string Type { get; private set; }
 
     public void SetState(State newState)
     {
@@ -28,8 +29,9 @@ public class StateComponent : Component
         this.StateChanged.Fire(newState);
     }
 
-    public StateComponent()
+    public StateComponent(string Type)
     {
+        this.Type = Type;
         StateSystem.Register(this);
     }
 
@@ -57,14 +59,14 @@ public class StateComponent : Component
 
     private Animation MapStateToAnim(State state)
     {
-        Texture2D? textureDefault = TextureManager.TryGetTexture("Idle.png");
-        Rectangle? spriteRectDefault = TextureManager.GetNthSpriteRect($"Idle.png", 1);
+        Texture2D? textureDefault = TextureManager.TryGetTexture(String.Join(".", this.Type,"Idle.png"));
+        Rectangle? spriteRectDefault = TextureManager.GetNthSpriteRect(String.Join(".", this.Type,"Idle.png"), 1);
 
         if (textureDefault is null || spriteRectDefault is null)
             throw new Exception("Failed to fetch texture Idle.png");
 
-        Texture2D? texture = TextureManager.TryGetTexture($"{state.ToString()}.png");
-        Rectangle? spriteRect = TextureManager.GetNthSpriteRect($"{state.ToString()}.png", 1);
+        Texture2D? texture = TextureManager.TryGetTexture(String.Join(".", this.Type,$"{state.ToString()}.png"));
+        Rectangle? spriteRect = TextureManager.GetNthSpriteRect(String.Join(".", this.Type,$"{state.ToString()}.png"), 1);
 
         if (texture is null || spriteRect is null)
             throw new Exception($"Failed to fetch texture {state}");
@@ -72,7 +74,7 @@ public class StateComponent : Component
         return state switch
         {
             State.Attack1 => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 2.5f),
-            State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.5f, true),
+            State.Run => new Animation(new KeyFrames((Texture2D) texture, (Rectangle) spriteRect), 1.0f, true),
             State.Idle => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 0.01f),
             State.Jump => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 1.13f),
             State.Run_Attack => new Animation(new KeyFrames((Texture2D)texture, (Rectangle) spriteRect), 2.5f, true),

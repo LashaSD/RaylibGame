@@ -1,5 +1,7 @@
 public class AnimationComponent : Component
 {
+    private RenderComponent? RenderComponent;
+
     public Animation? CurrentAnimation;
     
     public AnimationComponent()
@@ -13,6 +15,11 @@ public class AnimationComponent : Component
         this.CurrentAnimation = animation;
     }
 
+    public override void Init()
+    {
+        this.RenderComponent = this.ParentEntity?.GetComponent<RenderComponent>();
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.CurrentAnimation is null)
@@ -20,12 +27,11 @@ public class AnimationComponent : Component
 
         this.CurrentAnimation.Update(deltaTime);
 
-        RenderComponent? renderComponent = this.ParentEntity?.GetComponent<RenderComponent>();
         Sprite sprite = new Sprite(
             this.CurrentAnimation.AnimKeyFrames.Texture,
             this.CurrentAnimation.AnimKeyFrames.SpriteRect
         );
 
-        renderComponent?.SetSprite(sprite);
+        this.RenderComponent?.SetSprite(sprite);
     }
 }

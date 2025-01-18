@@ -22,7 +22,8 @@ public static class TextureManager
         {
             foreach (string fileDir in Directory.GetFiles(dir))
             {
-                Textures.Add(Path.GetFileName(fileDir), Raylib.LoadTexture(fileDir));
+                string shortDir = Path.GetFileName(dir);
+                Textures.Add(String.Join(".", shortDir, Path.GetFileName(fileDir)), Raylib.LoadTexture(fileDir));
             }
         }
     }
@@ -39,11 +40,8 @@ public static class TextureManager
 
     public static Rectangle? GetNthSpriteRect(string name, int n)
     {
-        int TileCount;
-        TextureTiles.Textures.TryGetValue(name, out TileCount);
-
-        Texture2D Texture;
-        Textures.TryGetValue(name, out Texture);
+        TextureTiles.Textures.TryGetValue(name, out int TileCount);
+        Textures.TryGetValue(name, out Texture2D Texture);
 
         float SpriteWidth = Texture.Width / TileCount;
         float SpriteHeight = Texture.Height;

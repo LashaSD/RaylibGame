@@ -40,10 +40,10 @@ class PhysicsSystem
     public static Fixture CreateGroundSensor(Body body, float width, float height)
     {
         Fixture sensor = FixtureFactory.AttachRectangle(
-            width,
-            height,
+            width * 0.4f,
+            0.1f,
             0,
-            offset: new Vector2(0, body.FixtureList[0].Shape.Radius + height / 2 + 0.5f),
+            new Vector2(-width * 0.4f / 2, height / 2),
             body
         );
 
@@ -67,6 +67,12 @@ class PhysicsSystem
     {
         Vector2 simVector = FarseerPhysics.ConvertUnits.ToSimUnits(new Vector2(vector.X, vector.Y));
         return simVector;
+    }
+
+    public static System.Numerics.Vector2 ToDisplayUnits(Vector2 vector)
+    {
+        var disVector = FarseerPhysics.ConvertUnits.ToDisplayUnits(new Vector2(vector.X, vector.Y));
+        return new(disVector.X, disVector.Y);
     }
 
     public static float ToSimUnits(float num)

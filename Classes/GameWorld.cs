@@ -11,76 +11,95 @@ public enum EntityType
 
 public struct EntityData
 {
-    public Vector2 Position;
-    public Vector2 Size;
-    public Vector2? Scale;
-
     public string TextureFile;
 
     // Grid of Sprite Segment Indices
     public List<List<(int, int)>>? TileMap;
-    public int? SpriteIndex;
+
+    public Vector2 Position;
+    public Vector2 Size;
+    public Vector2? Scale;
 
     public float? Friction;
     public float? Density;
 
-    public int? SpriteRow;
-    public int? SpriteCol;
+    public int? SpriteIndex;
 
     public EntityType Type;
 }
 
 public static class EntityFactory
 {
-    public static void ConstructStatic(EntityData eData)
+    private static Sprite? ConstructSprite(EntityData eData)
     {
         Texture2D? texture = TextureManager.TryGetTexture(eData.TextureFile);
         if (!texture.HasValue)
-        {
-            Raylib.TraceLog(TraceLogLevel.Error, $"Failed to get Texture while constructing a static entity with Texture {eData.TextureFile}");
-            return;
-        }
-        Entity e = new();
-        RenderComponent renderComponent = new();
+            return null;
 
         Rectangle? sourceRect = null;
-        if (eData.Type == EntityType.Terrain)
-        {
-            if (eData.TileMap is null)
-            {
-                sourceRect = TextureManager.GetTerrainTile(eData.SpriteRow ?? 0, eData.SpriteCol ?? 0);
-                Sprite sprite = new(texture.Value, sourceRect.Value);
-                sprite.SetScaleForSize(eData.Size);
-                renderComponent.SetSprite(sprite);
-            } else {
-                TileMap tileMap = new(eData.Size);
-                foreach (List<(int, int)> spriteRow in eData.TileMap)
-                {
-                    List<Sprite> sprites = new();
-                    foreach ((int, int) spriteIdx in spriteRow)
-                    {
-                        for (int i = 0; i < spriteIdx.Item2; ++i)
-                        {
-                            Sprite newSprite = new(texture.Value, TextureManager.GetTerrainTileByIndex(spriteIdx.Item1));
-                            if (eData.Scale is not null)
-                                newSprite.SetScale(eData.Scale.Value);
-                            sprites.Add(newSprite);
-                        }
-                    }
-                    tileMap.AddSpriteRow(sprites);
-                }
-
-                renderComponent.SetTileMap(tileMap);
-            }
-        }
+        if (eData.Type == EntityType.Terrain && eData.TileMap is null)
+            sourceRect = TextureManager.GetTerrainTileByIndex(eData.SpriteIndex ?? 0);
         else
         {
             sourceRect = TextureManager.GetNthSpriteRect(eData.TextureFile, 0);
             if (sourceRect is null)
-                throw new Exception($"Couldn't get source rectangle of a texture: {eData.TextureFile}");
+                return null;
+        }
 
-            Sprite sprite = new(texture.Value, sourceRect.Value);
-            sprite.SetScaleForSize(eData.Size);
+        Sprite sprite = new(texture.Value, sourceRect.Value);
+        sprite.SetScaleForSize(eData.Size);
+
+        return sprite;
+    }
+
+    private static TileMap? ConstructTileMap(EntityData eData)
+    {
+        if (eData.TileMap is null)
+            return null;
+
+        Texture2D? texture = TextureManager.TryGetTexture(eData.TextureFile);
+        if (!texture.HasValue)
+            return null;
+
+        TileMap tileMap = new(eData.Size);
+        foreach (List<(int, int)> spriteRow in eData.TileMap)
+        {
+            List<Sprite> sprites = new();
+            foreach ((int, int) spriteIdx in spriteRow)
+            {
+                for (int i = 0; i < spriteIdx.Item2; ++i)
+                {
+                    Sprite newSprite = new(texture.Value, TextureManager.GetTerrainTileByIndex(spriteIdx.Item1));
+                    if (eData.Scale is not null)
+                        newSprite.SetScale(eData.Scale.Value);
+                    sprites.Add(newSprite);
+                }
+            }
+            tileMap.AddSpriteRow(sprites);
+        }
+
+        return tileMap;
+    }
+
+    public static void ConstructStatic(EntityData eData)
+    {
+        Entity e = new();
+        RenderComponent renderComponent = new();
+
+        if (eData.Type == EntityType.Terrain && eData.TileMap is not null)
+        {
+            TileMap? tileMap = ConstructTileMap(eData);
+            if (tileMap is null)
+                throw new Exception("Couldn't Construct the Tile Map");
+
+            renderComponent.SetTileMap(tileMap);
+        }
+        else
+        {
+            Sprite? sprite = ConstructSprite(eData);
+            if (sprite is null)
+                throw new Exception("Couldn't Construct A Sprite");
+
             renderComponent.SetSprite(sprite);
         }
 
@@ -101,16 +120,23 @@ public static class EntityFactory
         if (eData.Density is null)
             return;
 
-        Texture2D? texture = TextureManager.TryGetTexture(eData.TextureFile);
-        Rectangle? srcRect = TextureManager.GetNthSpriteRect(eData.TextureFile, 0);
-        if (texture is null || srcRect is null)
-            return;
+        Sprite? sprite = ConstructSprite(eData);
+        if (sprite is null)
+            throw new Exception($"Couldn't Construct A Sprite {eData.TextureFile}");
 
-        Sprite sprite = new(texture.Value, srcRect.Value);
+        string? charType = eData.Type switch
+        {
+            EntityType.Player => "PlayerKnight",
+            EntityType.Enemy => "EnemyKnight",
+            _ => null,
+        };
+
+        if (charType is null)
+            throw new Exception($"Invalid Entity Type for a Dynamic Body {eData.Type.ToString()}");
 
         Entity e = new();
 
-        StateComponent state = new();
+        StateComponent state = new(eData.Type == EntityType.Player ? "PlayerKnight" : "EnemyKnight");
         AnimationComponent anim = new();
         ActionComponent action = new();
         MovementComponent move = new();
@@ -141,6 +167,12 @@ public static class EntityFactory
         e.AddComponent<RenderComponent>(renderComponent);
 
         e.Init();
+
+        if (eData.Type == EntityType.Player)
+        {
+            if (dynamicBody.PhysicsBody is not null)
+                dynamicBody.PhysicsBody.FixedRotation = true;
+        }
     }
 }
 
@@ -177,32 +209,51 @@ public static class WorldReader
     public static GameWorld ReadFile()
     { 
         GameWorld world = new();
-        world.AddStaticBodies(new EntityData() { 
-            Position = new Vector2(2400 / 2, WindowHeight - 50),
-            TileMap = new List<List<(int, int)>>() { 
-                new List<(int, int)>() { (929, 10), (928, 40) },
-                new List<(int, int)>() { (961, 50 )},
-                new List<(int, int)>() { (961, 50 )},
-                new List<(int, int)>() { (961, 50 )},
-                new List<(int, int)>() { (993, 50 )},
-                new List<(int, int)>() { (993, 50 )},
-                new List<(int, int)>() { (993, 50 )},
+        world.AddStaticBodies(
+            new EntityData() { 
+                Position = new Vector2(2400 / 2, WindowHeight - 50),
+                TileMap = new List<List<(int, int)>>() { 
+                    new List<(int, int)>() { (929, 10), (928, 40) },
+                    new List<(int, int)>() { (961, 50 )},
+                    new List<(int, int)>() { (961, 50 )},
+                    new List<(int, int)>() { (961, 50 )},
+                    new List<(int, int)>() { (993, 50 )},
+                    new List<(int, int)>() { (993, 50 )},
+                    new List<(int, int)>() { (993, 50 )},
+                },
+                TextureFile = "TerrainTexture.png",
+                Size = new Vector2(2400, 100),
+                Scale = new Vector2(3, 3),
+                Type = EntityType.Terrain,
+                Friction = 10 
             },
-            TextureFile = "TerrainTexture.png",
-            Size = new Vector2(2400, 100),
-            Scale = new Vector2(3, 3),
-            Type = EntityType.Terrain,
-            Friction = 250 
-        });
+
+            new EntityData() { 
+                Position = new Vector2(48 * 4, WindowHeight - 100 - 144),
+                TileMap = new List<List<(int, int)>>() { 
+                    new List<(int, int)>() { (128, 1) },
+                    new List<(int, int)>() { (128, 1) },
+                    new List<(int, int)>() { (128, 1) },
+                    new List<(int, int)>() { (128, 1) },
+                    new List<(int, int)>() { (128, 1) },
+                    new List<(int, int)>() { (128, 1) },
+                },
+                TextureFile = "TerrainTexture.png",
+                Size = new Vector2(48, 288),
+                Scale = new Vector2(3, 3),
+                Type = EntityType.Terrain,
+                Friction = 10 
+            }
+        );
 
         world.AddDynamicBodies(
-                new EntityData() {
-                    Density = 80,
-                    Position = new Vector2(200, 100),
-                    Size = new Vector2(80, 86),
-                    TextureFile = "Idle.png",
-                    Type = EntityType.Player
-                }
+            new EntityData() {
+                Density = 80,
+                Position = new Vector2(200, 100),
+                Size = new Vector2(80, 86),
+                TextureFile = "PlayerKnight.Idle.png",
+                Type = EntityType.Player
+            }
         );
 
         return world; 

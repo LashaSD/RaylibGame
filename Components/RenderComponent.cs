@@ -7,7 +7,8 @@ public class RenderComponent : Component
     public TileMap? TileMap { get; private set; }
     public Shader? Shader { get; set; }
 
-    public TransformComponent? Transform;
+    private TransformComponent? Transform;
+    private DynamicBodyComponent? DynamicBody;
 
     public bool Mirror { get; set; } = false;
 
@@ -40,6 +41,7 @@ public class RenderComponent : Component
     public override void Init()
     {
         this.Transform = this.ParentEntity?.GetComponent<TransformComponent>();
+        this.DynamicBody = this.ParentEntity?.GetComponent<DynamicBodyComponent>();
         this.UpdateSprite();
     }
 
@@ -55,6 +57,17 @@ public class RenderComponent : Component
             this.RenderSprite(this.Sprite);
         else if (this.TileMap is not null)
             this.RenderSpriteTileMap(this.TileMap);
+
+        // DBG
+        if (this.DynamicBody is not null && this.DynamicBody.GroundSensor is not null)
+        {
+            var pos = PhysicsSystem.ToDisplayUnits(this.DynamicBody.GroundSensor.Body.Position);
+            var size = this.DynamicBody.BodySize;
+            Raylib.DrawRectangleV(pos + new Vector2( - (size.X * 0.4f) / 2, size.Y / 2), new(size.X * 0.4f, 5f), Color.Blue);
+
+            var pos1 = pos+ new Vector2(-size.X / 2, - size.Y / 2);
+            Raylib.DrawText($"{this.DynamicBody?.Collisions} {this.DynamicBody?.IsGrounded}", (int) pos1.X, (int) pos1.Y, 16, Color.Gold);
+        }
 
         if (this.Shader.HasValue)
         {
