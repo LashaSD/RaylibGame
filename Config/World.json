@@ -59,12 +59,12 @@
                 "Y": 100
             },
             "Size": {
-                "X": 80, 
+                "X": 45, 
                 "Y": 86
             },
             "TextureFile": "PlayerKnight.Idle.png",
             "Type": 0,
-            "Density": 80
+            "Density": 142
         },
 
         {
@@ -73,12 +73,12 @@
                 "Y": 100
             },
             "Size": {
-                "X": 80, 
-                "Y": 86
+                "X": 50, 
+                "Y": 70
             },
             "TextureFile": "EnemyKnight.Idle.png",
             "Type": 1,
-            "Density": 80
+            "Density": 140
         }
     ]
 }
