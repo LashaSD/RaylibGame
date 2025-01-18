@@ -20,6 +20,7 @@ public class Game
         {
             // Input & Other Systems
             InputSystem.Update(Raylib.GetFrameTime());
+            AISystem.Update(Raylib.GetFrameTime());
             ActionSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
             // Rendering

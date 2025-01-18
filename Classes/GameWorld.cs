@@ -174,6 +174,8 @@ public static class EntityFactory
 
         if (eData.Type == EntityType.Enemy)
         {
+            AIComponent AiComponent = new();
+            e.AddComponent<AIComponent>(AiComponent);
             // Custom Logic
         }
 
