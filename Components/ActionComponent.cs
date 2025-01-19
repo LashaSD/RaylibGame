@@ -44,6 +44,21 @@ public class JumpAction : IAction
     }
 }
 
+public class AttackAction1 : IAction
+{
+    public override State? PostExecutionState { get; protected set; } = State.Attack1;
+    public override float? Duration { get; protected set; } = 0.55f;
+    public override float? DebounceTime { get; protected set; } = 0.55f;
+
+    public override void Execute(Entity entity)
+    {
+        DynamicBodyComponent? dynamicBody = entity.GetComponent<DynamicBodyComponent>();
+
+        if (dynamicBody is null || dynamicBody.PhysicsBody is null)
+            return;
+    }
+}
+
 public class ActionComponent : Component
 {
     private StateComponent? StateComp;
@@ -85,6 +100,11 @@ public class ActionComponent : Component
     public override void Init()
     {
         this.StateComp = this.ParentEntity?.GetComponent<StateComponent>();
+    }
+
+    public override void Destroy()
+    {
+        ActionSystem.Remove(this);
     }
 
     public override void Update(float deltaTime)

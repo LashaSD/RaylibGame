@@ -7,6 +7,11 @@ class BaseSystem<T> where T : Component
         components.Add(component);
     }
 
+    public static void Remove(T component)
+    {
+        components.Remove(component);
+    }
+
     public static void Update(float deltaTime)
     {
         foreach (T component in components)

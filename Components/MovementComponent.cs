@@ -54,6 +54,7 @@ public class MovementComponent : Component
             if (!wasMoving)
                 return;
 
+            this.MoveDirection = Vector2.Zero;
             if (this.StateComponent is not null && this.StateComponent.CurrentState == State.Run)
                 // Stopped Moving so change the State to Idle
                 this.StateComponent?.SetState(State.Idle);

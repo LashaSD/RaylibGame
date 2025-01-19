@@ -31,6 +31,11 @@ class DynamicBodyComponent : Component
         this.GroundSensor.OnSeparation += this.OnGroundSeparation;
     }
 
+    public override void Destroy()
+    {
+        DynamicBodySystem.Remove(this);
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.PhysicsBody is not null && this.Transform is not null)

@@ -6,6 +6,9 @@ public abstract class Component
     public virtual void Init()
     {}
 
+    public virtual void Destroy()
+    {}
+
     public virtual void Update(float deltaTime)
     {}
 

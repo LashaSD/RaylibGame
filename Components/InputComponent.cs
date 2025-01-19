@@ -20,6 +20,11 @@ public class InputComponent : Component
         this.MovementComponent = this.ParentEntity.GetComponent<MovementComponent>();
     }
 
+    public override void Destroy()
+    {
+        InputSystem.Remove(this);
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.ParentEntity is null)

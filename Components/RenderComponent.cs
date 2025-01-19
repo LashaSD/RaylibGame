@@ -45,6 +45,11 @@ public class RenderComponent : Component
         this.UpdateSprite();
     }
 
+    public override void Destroy()
+    {
+        RenderSystem.Remove(this);
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.Transform is null || (this.Sprite is null && this.TileMap is null))
@@ -74,6 +79,7 @@ public class RenderComponent : Component
             Raylib.EndShaderMode();
         }
     }
+
 
     private void RenderSprite(Sprite sprite)
     {

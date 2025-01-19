@@ -13,8 +13,9 @@ public class Game
 
         TextureManager.LoadTextures();
 
-        GameWorld world = WorldReader.ReadFile(Path.Join("Config", "World.json"));
-        world.Construct();
+        EntityDataContainer entityData = WorldReader.ReadFile(Path.Join("Config", "World.json"));
+        GameWorld World = new();
+        World.Construct(entityData);
 
         while (!Raylib.WindowShouldClose())
         {
@@ -23,11 +24,14 @@ public class Game
             AISystem.Update(Raylib.GetFrameTime());
             ActionSystem.Update(Raylib.GetFrameTime());
             AnimationSystem.Update(Raylib.GetFrameTime());
+            CameraSystem.Update(Raylib.GetFrameTime());
             // Rendering
             Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Black);
 
-                RenderSystem.Update(Raylib.GetFrameTime());
+                CameraSystem.Begin();
+                    RenderSystem.Update(Raylib.GetFrameTime());
+                CameraSystem.End();
 
                 Raylib.DrawFPS(8, WindowHeight - 16 - 8);
             Raylib.EndDrawing();

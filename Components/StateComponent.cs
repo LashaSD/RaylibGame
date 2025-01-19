@@ -41,6 +41,11 @@ public class StateComponent : Component
         this.OnStateChanged(State.Idle);
     }
 
+    public override void Destroy()
+    {
+        StateSystem.Remove(this);
+    }
+
     private void OnStateChanged(State newState) 
     {
         if (this.ParentEntity is null)

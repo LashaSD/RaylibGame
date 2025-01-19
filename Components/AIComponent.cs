@@ -18,6 +18,11 @@ public class AIComponent : Component
         this.ActionComponent = this.ParentEntity?.GetComponent<ActionComponent>();
     }
 
+    public override void Destroy()
+    {
+        AISystem.Remove(this);
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.MovementComponent is null || this.StateComponent is null ||  this.ActionComponent is null)

@@ -18,6 +18,7 @@ public static class Settings
     public static readonly Dictionary<KeyboardKey, IAction> ActionKeybinds = new Dictionary<KeyboardKey, IAction>()
     {
         { KeyboardKey.Space, new JumpAction() },
+        { KeyboardKey.F, new AttackAction1() },
     };
 
     public static readonly Dictionary<KeyboardKey, Vector2> MovementKeybinds = new Dictionary<KeyboardKey, Vector2>()
@@ -35,7 +36,8 @@ public static class Settings
                 {
                     { State.Idle, AnimationHelper.QuickAnimData("PlayerKnight.Idle.png", 0.01f, false) },
                     { State.Run, AnimationHelper.QuickAnimData("PlayerKnight.Run.png", 1.25f, true) },
-                    { State.Jump, AnimationHelper.QuickAnimData("PlayerKnight.Jump.png", 1.13f, false) }
+                    { State.Jump, AnimationHelper.QuickAnimData("PlayerKnight.Jump.png", 1.13f, false) },
+                    { State.Attack1, AnimationHelper.QuickAnimData("PlayerKnight.Attack2.png", 0.23f, false) }
                 }
             },
             ["EnemyKnight"] = new CharacterAnimationSettings

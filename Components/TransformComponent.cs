@@ -43,4 +43,9 @@ public class TransformComponent : Component
     {
         this.SetTransform(pos, scale);
     }
+
+    public override void Destroy()
+    {
+        TransformSystem.Remove(this);
+    }
 }

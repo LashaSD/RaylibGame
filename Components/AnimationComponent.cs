@@ -20,6 +20,11 @@ public class AnimationComponent : Component
         this.RenderComponent = this.ParentEntity?.GetComponent<RenderComponent>();
     }
 
+    public override void Destroy()
+    {
+        AnimationSystem.Remove(this);
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.CurrentAnimation is null)

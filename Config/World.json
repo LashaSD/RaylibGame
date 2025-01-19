@@ -23,7 +23,8 @@
                 "X": 3,
                 "Y": 3
             },
-            "Type": 2
+            "Type": 2,
+            "Friction": 250
         },
         {
             "Position" : {
@@ -49,7 +50,7 @@
                 "Y": 3
             },
             "Type": 2,
-            "Friction": 50
+            "Friction": 100
         }
     ],
     "DynamicEntities" : [
@@ -73,12 +74,12 @@
                 "Y": 100
             },
             "Size": {
-                "X": 50, 
-                "Y": 70
+                "X": 45, 
+                "Y": 86
             },
             "TextureFile": "EnemyKnight.Idle.png",
             "Type": 1,
-            "Density": 140
+            "Density": 142
         }
     ]
 }
