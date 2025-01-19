@@ -57,7 +57,10 @@ public class StateComponent : Component
             return;
 
         Animation? anim = Settings.MapStateToAnim(this.Type, newState);
-        animComponent.LoadAnim(anim);
-        anim.Play();
+        if (anim is not null)
+        {
+            animComponent.LoadAnim(anim);
+            anim.Play();
+        }
     }
 }

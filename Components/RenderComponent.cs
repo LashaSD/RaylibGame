@@ -9,6 +9,7 @@ public class RenderComponent : Component
 
     private TransformComponent? Transform;
     private DynamicBodyComponent? DynamicBody;
+    private HealthComponent? HealthComponent;
 
     public bool Mirror { get; set; } = false;
 
@@ -42,6 +43,7 @@ public class RenderComponent : Component
     {
         this.Transform = this.ParentEntity?.GetComponent<TransformComponent>();
         this.DynamicBody = this.ParentEntity?.GetComponent<DynamicBodyComponent>();
+        this.HealthComponent = this.ParentEntity?.GetComponent<HealthComponent>();
         this.UpdateSprite();
     }
 
@@ -64,14 +66,33 @@ public class RenderComponent : Component
             this.RenderSpriteTileMap(this.TileMap);
 
         // DBG
-        if (this.DynamicBody is not null && this.DynamicBody.GroundSensor is not null)
+        // if (this.DynamicBody is not null && this.DynamicBody.GroundSensor is not null)
+        // {
+        //     var pos = PhysicsSystem.ToDisplayUnits(this.DynamicBody.GroundSensor.Body.Position);
+        //     var size = this.DynamicBody.BodySize;
+        //     Raylib.DrawRectangleV(pos + new Vector2( - (size.X * 0.4f) / 2, size.Y / 2), new(size.X * 0.4f, 5f), Color.Blue);
+        //
+        //     var pos1 = pos+ new Vector2(-size.X / 2, - size.Y / 2);
+        //     Raylib.DrawText($"{this.DynamicBody?.Collisions} {this.DynamicBody?.IsGrounded}", (int) pos1.X, (int) pos1.Y, 16, Color.Gold);
+        // }
+        
+        if (this.HealthComponent is not null && this.DynamicBody is not null)
         {
-            var pos = PhysicsSystem.ToDisplayUnits(this.DynamicBody.GroundSensor.Body.Position);
+            var pos = this.Transform.Position;
             var size = this.DynamicBody.BodySize;
-            Raylib.DrawRectangleV(pos + new Vector2( - (size.X * 0.4f) / 2, size.Y / 2), new(size.X * 0.4f, 5f), Color.Blue);
+            var pos1 = pos + new Vector2(-size.X / 2, -size.Y / 2);
 
-            var pos1 = pos+ new Vector2(-size.X / 2, - size.Y / 2);
-            Raylib.DrawText($"{this.DynamicBody?.Collisions} {this.DynamicBody?.IsGrounded}", (int) pos1.X, (int) pos1.Y, 16, Color.Gold);
+            Color color = Color.Red;
+
+            if (this.HealthComponent.Health > 40) {
+                color = Color.Yellow;
+            }
+
+            if (this.HealthComponent.Health > 70) {
+                color = Color.Green;
+            }
+
+            Raylib.DrawText($"{this.HealthComponent.Health}", (int) pos1.X, (int) pos1.Y, 16, color);
         }
 
         if (this.Shader.HasValue)
@@ -94,8 +115,7 @@ public class RenderComponent : Component
         );
         
         Rectangle srcRect = sprite.SourceRect;
-        if (this.Mirror)
-            srcRect.Width *= -1;
+        srcRect.Width *= this.Transform.FaceDirection.X;
         
         Raylib.DrawTexturePro(
             sprite.Texture,
@@ -120,8 +140,7 @@ public class RenderComponent : Component
         );
         
         Rectangle srcRect = sprite.SourceRect;
-        if (this.Mirror)
-            srcRect.Width *= -1;
+        srcRect.Width *= this.Transform.FaceDirection.X;
         
         Raylib.DrawTexturePro(
             sprite.Texture,

@@ -36,7 +36,7 @@ public class InputComponent : Component
             {
                 if (Raylib.IsKeyDown(key))
                 {
-                    this.ActionComponent.Execute(Settings.ActionKeybinds[key]);
+                    this.ActionComponent.Execute(Settings.ActionKeybinds[key]());
                 }
             }
         }

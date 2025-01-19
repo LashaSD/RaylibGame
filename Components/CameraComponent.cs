@@ -9,9 +9,10 @@ public class CameraComponent : Component
     private MovementComponent? MovementComponent;
     private RenderComponent? RenderComponent;
 
-    public float Smoothness { get; set; } = 0.25f;
-    public float Zoom { get; set; } = 1f;
+    public float Smoothness { get; set; } = 0.15f;
+    public float Zoom { get; set; } = 1.5f;
     public float DirectionConstantPx { get; set; } = 50;
+    public float HeightScale { get; set; } = 0.65f;
 
     public CameraComponent()
     {
@@ -44,7 +45,7 @@ public class CameraComponent : Component
         Vector2 targetPosition = (this.Transform.Position + this.RenderComponent.Sprite.SizePx / 2) + offset;
 
         this.Camera.Target = Vector2.Lerp(this.Camera.Target, targetPosition, this.Smoothness);
-        this.Camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.6f);
+        this.Camera.Offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * this.HeightScale);
         this.Camera.Zoom = this.Zoom;
     }
 }

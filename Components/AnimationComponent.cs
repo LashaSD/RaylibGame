@@ -1,6 +1,7 @@
 public class AnimationComponent : Component
 {
     private RenderComponent? RenderComponent;
+    private StateComponent? StateComponent;
 
     public Animation? CurrentAnimation;
     
@@ -18,6 +19,7 @@ public class AnimationComponent : Component
     public override void Init()
     {
         this.RenderComponent = this.ParentEntity?.GetComponent<RenderComponent>();
+        this.StateComponent = this.ParentEntity?.GetComponent<StateComponent>();
     }
 
     public override void Destroy()
@@ -29,6 +31,15 @@ public class AnimationComponent : Component
     {
         if (this.CurrentAnimation is null)
             return;
+
+        if (this.CurrentAnimation.AnimState == AnimationState.Finished || this.CurrentAnimation.AnimState == AnimationState.Cancelled)
+        {
+            if (this.StateComponent?.CurrentState != State.Defend)
+            {
+                // this.StateComponent?.SetState(State.Idle);
+                return;
+            }
+        }
 
         this.CurrentAnimation.Update(deltaTime);
 

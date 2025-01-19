@@ -6,6 +6,8 @@ public class TransformComponent : Component
     public Vector2 Scale { get; private set; } = new Vector2(1, 1);
     public float Rotation { get; set; } =  0.0f;
 
+    public Vector2 FaceDirection { get; set; } = new Vector2(1, 0);
+
     public void SetPosition(Vector2 pos)
     {
         this.Position = pos;

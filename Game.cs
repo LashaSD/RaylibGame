@@ -17,6 +17,14 @@ public class Game
         GameWorld World = new();
         World.Construct(entityData);
 
+        Texture2D? background = TextureManager.TryGetTexture("SnowBg1.png");
+        if (background is null)
+            throw new Exception("Couldn't Load Background Texture");
+
+        Rectangle source = new Rectangle(0, 0, background.Value.Width, background.Value.Height);
+        Rectangle dest = new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+        Vector2 origin = new Vector2(0, 0);
+
         while (!Raylib.WindowShouldClose())
         {
             // Input & Other Systems
@@ -28,6 +36,7 @@ public class Game
             // Rendering
             Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Black);
+                Raylib.DrawTexturePro(background.Value, source, dest, origin, 0.0f, Color.White);
 
                 CameraSystem.Begin();
                     RenderSystem.Update(Raylib.GetFrameTime());

@@ -2,14 +2,21 @@ using Raylib_cs;
 
 public abstract class IAction
 {
-    public virtual State? PreExecutionState { get; protected set; }
-    public virtual State? PostExecutionState { get; protected set; }
-    public virtual float? Duration { get; protected set; }
-    public virtual float? DebounceTime { get; protected set; } = 0.25f;
     public virtual Func<bool>? TerminationCondition { get; protected set; }
 
+    public virtual float? Delay { get; protected set; }
+    public virtual float? Duration { get; protected set; }
+    public virtual float? DebounceTime { get; protected set; } = 0.25f;
+
+    public virtual State? PreExecutionState { get; protected set; }
+    public virtual State? PostExecutionState { get; protected set; }
+
+    public virtual bool Executed { get; set; } = false;
+
     public virtual void Execute(Entity entity)
-    { }
+    {
+        this.Executed = true;
+    }
 }
 
 public class ActionComponent : Component
@@ -17,29 +24,32 @@ public class ActionComponent : Component
     private StateComponent? StateComp;
 
     private IAction? CurrentAction;
-    private float ActionTimer = -100.0f;
-
-    private IAction? LastAction;
-    private float? LastActionTimer;
+    public Dictionary<string, float> ActionTimer = new();
 
     public void Execute(IAction action)
     {
         if (this.ParentEntity is null)
             return;
 
-        if (this.CurrentAction is not null && action == this.CurrentAction)
+        string? newActionName = action.ToString();
+        if (newActionName is null)
+            throw new Exception($"Couldn't Get the Name of an Action {this.CurrentAction}");
+
+        if (action.DebounceTime.HasValue)
         {
-            if (action.DebounceTime.HasValue)
-            {
-                if ((float) Raylib.GetTime() - this.ActionTimer < action.DebounceTime)
-                    return;
-            }
+            this.ActionTimer.TryGetValue(newActionName, out float timer);
+            if ((float) Raylib.GetTime() - timer < action.DebounceTime)
+                return;
         }
 
         this.CurrentAction = action;
-        this.ActionTimer = (float) Raylib.GetTime();
+        if (!this.ActionTimer.ContainsKey(newActionName))
+            this.ActionTimer.Add(newActionName, (float) Raylib.GetTime());
+        else
+            this.ActionTimer[newActionName] = (float) Raylib.GetTime();
 
-        action.Execute(this.ParentEntity);
+        if (action.Delay is null)
+            action.Execute(this.ParentEntity);
 
         if (action.PostExecutionState is not null)
             this.StateComp?.SetState((State) action.PostExecutionState);
@@ -62,11 +72,21 @@ public class ActionComponent : Component
 
     public override void Update(float deltaTime)
     {
-        if (this.CurrentAction is null || this.StateComp is null)
+        if (this.CurrentAction is null || this.StateComp is null || this.ParentEntity is null)
             return;
 
+        string? actionName = this.CurrentAction.ToString();
+        if (actionName is null)
+            throw new Exception($"Couldn't Get the Name of an Action {this.CurrentAction}");
+
         float duration = this.CurrentAction.Duration ?? 0.0f;
-        float timeElapsed = (float) Raylib.GetTime() - this.ActionTimer;
+        float timeElapsed = (float) Raylib.GetTime() - this.ActionTimer[actionName];
+
+        if (this.CurrentAction.Delay is not null)
+        {
+            if (timeElapsed > this.CurrentAction.Delay && !this.CurrentAction.Executed)
+                this.CurrentAction.Execute(this.ParentEntity);
+        }
 
         if (timeElapsed > duration)
         {
@@ -78,16 +98,17 @@ public class ActionComponent : Component
             this.ResetAction();
     }
 
-    private void ResetAction() 
+    public void ResetAction() 
     {
         if (this.CurrentAction is null)
             return;
 
-        this.LastAction = this.CurrentAction;
-        this.LastActionTimer = this.ActionTimer;
+        string? actionName = this.CurrentAction.ToString();
+        if (actionName is null)
+            throw new Exception($"Couldn't Get the Name of an Action {this.CurrentAction}");
 
+        this.ActionTimer[actionName] = 0.0f;
         this.CurrentAction = null;
-        this.ActionTimer = 0.0f;
 
         this.StateComp?.SetState(State.Idle);
     }

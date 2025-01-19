@@ -28,6 +28,6 @@ public class AIComponent : Component
         if (this.MovementComponent is null || this.StateComponent is null ||  this.ActionComponent is null)
             return;
 
-        // this.ActionComponent.Execute(this.Jump);
+        this.ActionComponent.Execute(new DefendAction());
     }
 }

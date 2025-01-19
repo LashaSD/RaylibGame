@@ -61,7 +61,7 @@ public class TileMapJsonConverter : JsonConverter<List<List<(int, int)>>>
                 int num1 = reader.GetInt32();
                 reader.Read();
                 int num2 = reader.GetInt32();
-                reader.Read(); // Close inner array
+                reader.Read();
 
                 row.Add((num1, num2));
             }

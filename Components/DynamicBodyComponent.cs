@@ -49,10 +49,10 @@ class DynamicBodyComponent : Component
             if (this.RenderComponent is not null)
             {
                 if (this.PhysicsBody.LinearVelocity.X < -0.005f)
-                    this.RenderComponent.Mirror = true;
+                    this.Transform.FaceDirection = Vector2.UnitX * -1;
 
                 else if (this.PhysicsBody.LinearVelocity.X > 0.005f)
-                    this.RenderComponent.Mirror = false;
+                    this.Transform.FaceDirection = Vector2.UnitX * 1;
             }
         }
     }

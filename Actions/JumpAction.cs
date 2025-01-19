@@ -1,12 +1,10 @@
 using System.Numerics;
-using System.Numerics;
-using FarseerPhysics.Collision;
 
 public class JumpAction : IAction
 {
     public override State? PostExecutionState { get; protected set; } = State.Jump;
     public override float? Duration { get; protected set; } = 2.5f;
-    public override float? DebounceTime { get; protected set; }
+    public override float? DebounceTime { get; protected set; } = 1.13f;
 
     private float JumpLength = 1f;
 
