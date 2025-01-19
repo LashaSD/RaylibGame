@@ -1,12 +1,13 @@
+using System.Runtime.CompilerServices;
 using Raylib_cs;
 
 public static class TextureManager
 {
     private static Dictionary<string, Texture2D> Textures = new();
-    
+
     public static void LoadTextures()
     {
-        string baseDirectory = Environment.CurrentDirectory;
+        string baseDirectory = PathHelper.GetProjectDirectory();
         string folderName = "Assets";
         string directoryPath = Path.Join(baseDirectory, folderName);
 

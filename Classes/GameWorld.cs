@@ -238,7 +238,7 @@ public static class WorldReader
             }
         };
 
-        var jsonFile = File.ReadAllText(json);
+        var jsonFile = File.ReadAllText(Path.Join(PathHelper.GetProjectDirectory(), json));
         return JsonSerializer.Deserialize<EntityDataContainer>(jsonFile, options) ?? throw new InvalidOperationException("Failed to parse JSON.");;
     }
 
