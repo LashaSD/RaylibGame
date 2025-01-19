@@ -6,57 +6,258 @@
                 "Y": 992
             },
             "Size": {
-                "X": 2400, 
+                "X": 4000, 
                 "Y": 384
             },
             "TileMap": [
-                [ [929, 10], [928, 80]],
-                [ [961, 90] ],
-                [ [961, 90] ],
-                [ [961, 90] ],
-                [ [993, 90] ],
-                [ [993, 90] ],
-                [ [993, 90] ]
+                [ [929, 10], [928, 10], [929, 29] , [332, 1]],
+				[ [961, 50] ],
+                [ [961, 50] ],
+                [ [961, 50] ],
+                [ [993, 50] ],
+                [ [993, 50] ],
+                [ [993, 50] ]
             ],
             "TextureFile": "TerrainTexture.png",
             "Scale": {
-                "X": 3,
+                "X": 5,
                 "Y": 3
             },
             "Type": 2,
             "Friction": 250
-        },
-        {
-            "Position" : {
-                "X": 192, 
-                "Y": 632
-            },
-            "Size": {
-                "X": 48, 
-                "Y": 336
-            },
-            "TileMap": [
-                [ [128, 1] ],
-                [ [128, 1] ],
-                [ [128, 1] ],
-                [ [128, 1] ],
-                [ [128, 1] ],
-                [ [128, 1] ],
-                [ [128, 1] ]
-            ],
-            "TextureFile": "TerrainTexture.png",
-            "Scale": {
-                "X": 3,
-                "Y": 3
-            },
-            "Type": 2,
-            "Friction": 50
-        }
+		},
+		{
+			"Position" : {
+				"X": 3230, 
+				"Y": 464
+			},
+			"Size": {
+				"X": 60, 
+				"Y": 1344
+			},
+			"TileMap": [
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ]
+			],	
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 5,
+				"Y": 3
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+
+		{
+
+			"Position" : {
+				"X": -900, 
+				"Y": 464
+			},
+			"Size": {
+				"X": 385, 
+				"Y": 1344
+			},
+			"TileMap": [
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ],
+				[ [333, 5] ]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 5,
+				"Y": 3
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+
+
+		{
+			"Position" : {
+				"X": 1036, 
+				"Y": 720
+			},
+			"Size": {
+				"X": 192, 
+				"Y": 64 
+			},
+			"TileMap":[
+				[[450, 3]]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 4,
+				"Y": 4
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+
+
+		{
+			"Position" : {
+				"X": 1050, 
+				"Y": 672
+			},
+			"Size": {
+				"X": 128, 
+				"Y": 64 
+			},
+			"TileMap":[
+				[[450, 2]]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 4,
+				"Y": 4
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+
+		{
+			"Position" : {
+				"X": 1450, 
+				"Y": 576
+			},
+			"Size": {
+				"X": 500, 
+				"Y": 64 
+			},
+			"TileMap":[
+				[[98, 8]]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 4,
+				"Y": 4
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+
+
+		{
+			"Position" : {
+				"X": 2104, 
+				"Y": 448
+			},
+			"Size": {
+				"X": 500, 
+				"Y": 64 
+			},
+			"TileMap":[
+				[[98, 8]]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 4,
+				"Y": 4
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+		
+
+
+		{
+			"Position" : {
+				"X": 2850, 
+				"Y": 320
+			},
+			"Size": {
+				"X": 704, 
+				"Y": 64 
+			},
+			"TileMap":[
+				[[98, 11]]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 4,
+				"Y": 4
+			},
+			"Type": 2,
+			"Friction": 250
+		},
+		{
+			"Position" : {
+				"X": 1000, 
+				"Y": 768
+			},
+			"Size": {
+				"X": 320, 
+				"Y": 64 
+			},
+			"TileMap":[
+				[[450, 5]]
+			],
+			"TextureFile": "TerrainTexture.png",
+			"Scale": {
+				"X": 4,
+				"Y": 4
+			},
+			"Type": 2,
+			"Friction": 100
+		}
+
     ],
     "DynamicEntities" : [
         {
             "Position" : {
-                "X": 200, 
+                "X": -500, 
                 "Y": 100
             },
             "Size": {
@@ -65,21 +266,87 @@
             },
             "TextureFile": "PlayerKnight.Idle.png",
             "Type": 0,
-            "Density": 142
+            "Density": 150
         },
-
-        {
+		{
             "Position" : {
-                "X": 450, 
+                "X": 2000, 
                 "Y": 100
             },
             "Size": {
                 "X": 45, 
                 "Y": 86
             },
-            "TextureFile": "EnemyKnight.Idle.png",
+            "TextureFile": "PlayerKnight.Idle.png",
             "Type": 1,
-            "Density": 142
+            "Density": 150
+        },
+		{
+            "Position" : {
+                "X": 1800, 
+                "Y": 100
+            },
+            "Size": {
+                "X": 45, 
+                "Y": 86
+            },
+            "TextureFile": "PlayerKnight.Idle.png",
+            "Type": 1,
+            "Density": 150
+        },
+		{
+            "Position" : {
+                "X": 3000, 
+                "Y": 100
+            },
+            "Size": {
+                "X": 45, 
+                "Y": 86
+            },
+            "TextureFile": "PlayerKnight.Idle.png",
+            "Type": 1,
+            "Density": 150
+        },
+		{
+            "Position" : {
+                "X": 2450, 
+                "Y": 100
+            },
+            "Size": {
+                "X": 45, 
+                "Y": 86
+            },
+            "TextureFile": "PlayerKnight.Idle.png",
+            "Type": 1,
+            "Density": 150
+        },
+		{
+            "Position" : {
+                "X": 1500, 
+                "Y": 100
+            },
+            "Size": {
+                "X": 45, 
+                "Y": 86
+            },
+            "TextureFile": "PlayerKnight.Idle.png",
+            "Type": 1,
+            "Density": 150
+        },
+
+		{
+            "Position" : {
+                "X": 800, 
+                "Y": 100
+            },
+            "Size": {
+                "X": 45, 
+                "Y": 86
+            },
+            "TextureFile": "PlayerKnight.Idle.png",
+            "Type": 1,
+            "Density": 150
         }
+
     ]
 }
