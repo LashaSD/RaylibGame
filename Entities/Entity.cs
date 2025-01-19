@@ -5,8 +5,7 @@ public enum EntityType
 {
     Player,
     Enemy,
-    Terrain,
-    Construction
+    Terrain
 }
 
 public struct EntityData

@@ -50,7 +50,7 @@
                 "Y": 3
             },
             "Type": 2,
-            "Friction": 100
+            "Friction": 50
         }
     ],
     "DynamicEntities" : [

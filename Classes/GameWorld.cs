@@ -10,20 +10,26 @@ public class GameWorld
     public void Construct(EntityDataContainer data)
     {
         foreach (EntityData eData in data.StaticEntities)
-        {
-            Entity e = EntityFactory.ConstructStatic(eData);
-            e.Id = this.IdTracker++;
-            this.EntityMap.Add(e.Id, e);
-        }
+            this.SpawnStatic(eData);
 
         foreach (EntityData eData in data.DynamicEntities)
-        {
-            Entity e = EntityFactory.ConstructDynamic(eData);
-            e.Id = this.IdTracker++;
-            this.EntityMap.Add(e.Id, e);
-            if (eData.Type == EntityType.Player)
-                this.PlayerId = e.Id;
-        }
+            this.SpawnDynamic(eData);
+    }
+
+    public void SpawnDynamic(EntityData data)
+    {
+        Entity e = EntityFactory.ConstructDynamic(data);
+        e.Id = this.IdTracker++;
+        this.EntityMap.Add(e.Id, e);
+        if (data.Type == EntityType.Player)
+            this.PlayerId = e.Id;
+    }
+
+    public void SpawnStatic(EntityData data)
+    {
+        Entity e = EntityFactory.ConstructStatic(data);
+        e.Id = this.IdTracker++;
+        this.EntityMap.Add(e.Id, e);
     }
 }
 

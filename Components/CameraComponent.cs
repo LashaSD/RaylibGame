@@ -27,6 +27,11 @@ public class CameraComponent : Component
         this.Camera.Zoom = this.Zoom;
     }
 
+    public override void Destroy()
+    {
+        CameraSystem.Remove(this);
+    }
+
     public override void Update(float deltaTime)
     {
         if (this.Transform is null || this.RenderComponent is null || this.RenderComponent.Sprite is null)

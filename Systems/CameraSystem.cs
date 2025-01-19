@@ -12,6 +12,9 @@ class CameraSystem : BaseSystem<CameraComponent>
 
     public static void End()
     {
+        if (components.Count == 0)
+            return;
+
         Raylib.EndMode2D();
     }
 }
