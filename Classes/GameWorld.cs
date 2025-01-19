@@ -3,6 +3,7 @@ using System.Text.Json;
 public class GameWorld
 {
     public readonly Dictionary<int, Entity> EntityMap = new();
+    public readonly List<Entity> Killables = new();
 
     public int PlayerId { get; private set; } = -1;
     private int IdTracker = 0;
@@ -21,6 +22,10 @@ public class GameWorld
         Entity e = EntityFactory.ConstructDynamic(data);
         e.Id = this.IdTracker++;
         this.EntityMap.Add(e.Id, e);
+
+        if (data.Type == EntityType.Player || data.Type == EntityType.Enemy)
+            this.Killables.Add(e);
+
         if (data.Type == EntityType.Player)
             this.PlayerId = e.Id;
     }
@@ -30,6 +35,17 @@ public class GameWorld
         Entity e = EntityFactory.ConstructStatic(data);
         e.Id = this.IdTracker++;
         this.EntityMap.Add(e.Id, e);
+    }
+
+    public void Heartbeat()
+    {
+        foreach (Entity killable in this.Killables)
+        {
+            if (killable.DeathMark)
+            {
+                killable.Destroy();
+            }
+        }
     }
 }
 

@@ -25,6 +25,7 @@ class DynamicBodyComponent : Component
 
         var bodySize = PhysicsSystem.ToSimUnits(this.BodySize);
         this.PhysicsBody = PhysicsSystem.CreateDynamicBody(PhysicsSystem.ToSimUnits(this.Transform.Position), bodySize.X, bodySize.Y, this.Density);
+        this.PhysicsBody.UserData = this.ParentEntity;
 
         this.GroundSensor = PhysicsSystem.CreateGroundSensor(this.PhysicsBody, bodySize.X, bodySize.Y);
         this.GroundSensor.OnCollision += this.OnGroundCollision;
@@ -33,6 +34,8 @@ class DynamicBodyComponent : Component
 
     public override void Destroy()
     {
+        this.PhysicsBody?.Dispose();
+        this.GroundSensor?.Dispose();
         DynamicBodySystem.Remove(this);
     }
 

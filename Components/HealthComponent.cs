@@ -14,7 +14,7 @@ public class HealthComponent : Component
     public void UpdateHealth()
     {
         if (this.Health <= 0 && this.DeathOnZero)
-            this.ParentEntity?.Destroy();
+            this.ParentEntity?.MarkDestroy();
     }
 
     public void TakeDamage(float dmg)

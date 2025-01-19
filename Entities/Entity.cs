@@ -47,6 +47,7 @@ public class EntityDataContainer
 public class Entity
 {
     public int Id { get; set; }
+    public bool DeathMark { get; private set; } = false;
 
     private readonly Dictionary<Type, Component> Components = new Dictionary<Type, Component>();
 
@@ -84,12 +85,16 @@ public class Entity
             component.Init();
     }
 
+    public void MarkDestroy()
+    {
+        this.DeathMark = true;
+    }
+
     public void Destroy()
     {
-        // Unregister components from their systems and clean up
         foreach (var component in Components.Values)
         {
-            component.Destroy(); // Ensure the component cleans itself up
+            component.Destroy();
         }
         Components.Clear();
     }

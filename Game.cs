@@ -38,6 +38,9 @@ public class Game
             // Physics
             PhysicsSystem.Update(Raylib.GetFrameTime());
             DynamicBodySystem.Update(Raylib.GetFrameTime());
+
+            //Heartbeat
+            World.Heartbeat();
         }
 
         Raylib.CloseWindow();

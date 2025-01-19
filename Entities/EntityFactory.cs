@@ -76,6 +76,10 @@ public static class EntityFactory
         }
 
         TransformComponent transform = new(eData.Position);
+
+        if (eData.Scale is not null)
+            transform.SetScale(eData.Scale.Value);
+
         StaticBodyComponent staticBody = new(eData.Size);
         if (eData.Friction is not null)
             staticBody.Friction = eData.Friction.Value;
@@ -121,6 +125,8 @@ public static class EntityFactory
         RenderComponent renderComponent = new();
         renderComponent.SetSprite(sprite);
 
+        HealthComponent health = new();
+
         if (eData.Type == EntityType.Player)
         {
             InputComponent inputComponent = new();
@@ -144,6 +150,7 @@ public static class EntityFactory
         e.AddComponent<DynamicBodyComponent>(dynamicBody);
         e.AddComponent<TransformComponent>(transform);
         e.AddComponent<RenderComponent>(renderComponent);
+        e.AddComponent<HealthComponent>(health);
 
         e.Init();
 
